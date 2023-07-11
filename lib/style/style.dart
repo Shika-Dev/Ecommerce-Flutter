@@ -26,6 +26,8 @@ class CusColor {
   static Color green = Color(0xff7CE5BD);
   static Color red = Color(0xffFB2448);
   static Color border = Color(0xffE7E6EF);
+  static Color bgShade = Color(0xffF6F5FF);
+  static Color footerText = Color(0xff8A8FB9);
   static Color disable = Color(0xff151875).withOpacity(.3);
 }
 
