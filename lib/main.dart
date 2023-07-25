@@ -4,6 +4,7 @@ import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/pages/account_page.dart';
 import 'package:ecom_web_flutter/pages/calculator_page.dart';
+import 'package:ecom_web_flutter/pages/shop_page.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/auth.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/account': (context) => const AccountPage(),
         '/calc': (context) => const Calculator(),
+        '/shop': (context) => const ShopPage()
       },
       theme: ThemeData(fontFamily: 'JosefinSans'),
     );
@@ -63,11 +65,13 @@ class _HomePageState extends State<HomePage> {
         } else {
           _currentPage = 0;
         }
-        _pageController.animateToPage(
-          _currentPage,
-          duration: Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(
+            _currentPage,
+            duration: Duration(milliseconds: 350),
+            curve: Curves.easeIn,
+          );
+        }
       });
     });
     Timer.periodic(Duration(seconds: 15), (Timer timer) {
@@ -77,11 +81,13 @@ class _HomePageState extends State<HomePage> {
         } else {
           _currentCatPage = 0;
         }
-        _catController.animateToPage(
-          _currentCatPage,
-          duration: Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
+        if (_catController.hasClients) {
+          _catController.animateToPage(
+            _currentCatPage,
+            duration: Duration(milliseconds: 350),
+            curve: Curves.easeIn,
+          );
+        }
       });
     });
     super.initState();
