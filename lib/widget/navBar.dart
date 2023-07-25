@@ -50,10 +50,13 @@ class _NavBarState extends State<NavBar> {
                     : CusTextStyle.navText),
           ),
           HorizontalSeparator(width: 2),
-          Text('Categories Product',
-              style: widget.index == 1
-                  ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                  : CusTextStyle.navText),
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/shop'),
+            child: Text('Shop',
+                style: widget.index == 1
+                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                    : CusTextStyle.navText),
+          ),
           HorizontalSeparator(width: 2),
           Text('Blog',
               style: widget.index == 2
@@ -171,10 +174,13 @@ class _NavBarState extends State<NavBar> {
               visible: !_showSearch, child: HorizontalSeparator(width: 2)),
           Visibility(
             visible: !_showSearch,
-            child: Text('Categories Product',
-                style: widget.index == 1
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/shop'),
+              child: Text('Shop',
+                  style: widget.index == 1
+                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                      : CusTextStyle.navText),
+            ),
           ),
           Visibility(
               visible: !_showSearch, child: HorizontalSeparator(width: 2)),
@@ -388,10 +394,13 @@ class _NavDrawerState extends State<NavDrawer> {
                         ? CusTextStyle.navText.copyWith(color: CusColor.green)
                         : CusTextStyle.navText)),
             VerticalSeparator(height: 3),
-            Text('Categories Product',
-                style: widget.index == 1
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/shop'),
+              child: Text('Shop',
+                  style: widget.index == 1
+                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                      : CusTextStyle.navText),
+            ),
             VerticalSeparator(height: 3),
             Text('Blog',
                 style: widget.index == 2
