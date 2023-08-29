@@ -1,3 +1,4 @@
+import 'package:ecom_web_flutter/api_repository/models/error_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,16 +25,18 @@ class ProductData extends Equatable {
       required this.name,
       this.description,
       required this.priceOriginal,
-      this.priceSale,
+      this.priceSale = 0,
       required this.imageUrl,
       required this.isDeleted,
+      required this.productDetail,
       this.unit});
 
   final int id;
   final String name;
   final String? description;
+  final String productDetail;
   final int priceOriginal;
-  final int? priceSale;
+  final int priceSale;
   final String imageUrl;
   final bool isDeleted;
   final String? unit;
@@ -52,21 +55,4 @@ class ProductData extends Equatable {
         isDeleted,
         unit
       ];
-}
-
-@JsonSerializable()
-class ErrorData extends Equatable {
-  const ErrorData({
-    this.errorCode,
-    this.errorMessage,
-  });
-
-  final String? errorCode;
-  final String? errorMessage;
-
-  factory ErrorData.fromJson(Map<String, dynamic> json) =>
-      _$ErrorDataFromJson(json);
-
-  @override
-  List<Object?> get props => [errorCode, errorMessage];
 }

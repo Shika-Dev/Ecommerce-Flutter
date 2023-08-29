@@ -1,3 +1,4 @@
+import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/style.dart';
@@ -38,9 +39,11 @@ class _NavBarState extends State<NavBar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Hekto',
-              style: CusTextStyle.bodyText
-                  .copyWith(fontWeight: FontWeight.w700, fontSize: 34)),
+          Image.asset(
+            Assets.icons.sevvaLogoJpg.path,
+            fit: BoxFit.fitWidth,
+            width: 150,
+          ),
           HorizontalSeparator(width: 8),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/'),
@@ -58,10 +61,13 @@ class _NavBarState extends State<NavBar> {
                     : CusTextStyle.navText),
           ),
           HorizontalSeparator(width: 2),
-          Text('Blog',
-              style: widget.index == 2
-                  ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                  : CusTextStyle.navText),
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/cart'),
+            child: Text('Cart',
+                style: widget.index == 2
+                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                    : CusTextStyle.navText),
+          ),
           HorizontalSeparator(width: 2),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/calc'),
@@ -70,12 +76,6 @@ class _NavBarState extends State<NavBar> {
                     ? CusTextStyle.navText.copyWith(color: CusColor.green)
                     : CusTextStyle.navText),
           ),
-          HorizontalSeparator(width: 2),
-          Text('Contact',
-              style: widget.index == 4
-                  ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                  : CusTextStyle.navText),
-          HorizontalSeparator(width: 2),
           Spacer(),
           Visibility(
             visible: _showSearch,
@@ -156,9 +156,11 @@ class _NavBarState extends State<NavBar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Hekto',
-              style: CusTextStyle.bodyText
-                  .copyWith(fontWeight: FontWeight.w700, fontSize: 34)),
+          Image.asset(
+            Assets.icons.sevvaLogoJpg.path,
+            fit: BoxFit.fitWidth,
+            width: 150,
+          ),
           HorizontalSeparator(width: 8),
           Visibility(
             visible: !_showSearch,
@@ -186,10 +188,13 @@ class _NavBarState extends State<NavBar> {
               visible: !_showSearch, child: HorizontalSeparator(width: 2)),
           Visibility(
             visible: !_showSearch,
-            child: Text('Blog',
-                style: widget.index == 2
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/cart'),
+              child: Text('Cart',
+                  style: widget.index == 2
+                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                      : CusTextStyle.navText),
+            ),
           ),
           Visibility(
               visible: !_showSearch, child: HorizontalSeparator(width: 2)),
@@ -202,15 +207,6 @@ class _NavBarState extends State<NavBar> {
                       ? CusTextStyle.navText.copyWith(color: CusColor.green)
                       : CusTextStyle.navText),
             ),
-          ),
-          Visibility(
-              visible: !_showSearch, child: HorizontalSeparator(width: 2)),
-          Visibility(
-            visible: !_showSearch,
-            child: Text('Contact',
-                style: widget.index == 4
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
           ),
           Visibility(
               visible: !_showSearch, child: HorizontalSeparator(width: 2)),
@@ -310,9 +306,11 @@ class _NavBarState extends State<NavBar> {
           ),
           Visibility(
             visible: !_showSearch,
-            child: Text('Hekto',
-                style: CusTextStyle.bodyText
-                    .copyWith(fontWeight: FontWeight.w700, fontSize: 34)),
+            child: Image.asset(
+              Assets.icons.sevvaLogoJpg.path,
+              fit: BoxFit.fitWidth,
+              width: 150,
+            ),
           ),
           _showSearch
               ? Expanded(
@@ -383,9 +381,11 @@ class _NavDrawerState extends State<NavDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hekto',
-                style: CusTextStyle.bodyText
-                    .copyWith(fontWeight: FontWeight.w700, fontSize: 34)),
+            Image.asset(
+              Assets.icons.sevvaLogoJpg.path,
+              fit: BoxFit.fitWidth,
+              width: 150,
+            ),
             VerticalSeparator(height: 5),
             GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/'),
@@ -402,10 +402,13 @@ class _NavDrawerState extends State<NavDrawer> {
                       : CusTextStyle.navText),
             ),
             VerticalSeparator(height: 3),
-            Text('Blog',
-                style: widget.index == 2
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/cart'),
+              child: Text('Cart',
+                  style: widget.index == 2
+                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                      : CusTextStyle.navText),
+            ),
             VerticalSeparator(height: 3),
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/calc'),
@@ -414,11 +417,6 @@ class _NavDrawerState extends State<NavDrawer> {
                       ? CusTextStyle.navText.copyWith(color: CusColor.green)
                       : CusTextStyle.navText),
             ),
-            VerticalSeparator(height: 3),
-            Text('Contact',
-                style: widget.index == 4
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
             Spacer(),
             GestureDetector(
               onTap: () => Navigator.of(context).pushNamed('/account'),

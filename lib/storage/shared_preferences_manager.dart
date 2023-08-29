@@ -4,6 +4,7 @@ class SharedPreferencesManager {
   static SharedPreferencesManager? _instance;
   static SharedPreferences? _sharedPreferences;
 
+  static const String keyGoogleAccessToken = 'accessGoogleToken';
   static const String keyAccessToken = 'accessToken';
   static const String keyName = 'name';
   static const String keyAuth = 'auth';

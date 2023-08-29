@@ -26,9 +26,10 @@ ProductData _$ProductDataFromJson(Map<String, dynamic> json) => ProductData(
       name: json['name'] as String,
       description: json['description'] as String?,
       priceOriginal: json['priceOriginal'] as int,
-      priceSale: json['priceSale'] as int?,
+      priceSale: json['priceSale'] as int? ?? 0,
       imageUrl: json['imageUrl'] as String,
       isDeleted: json['isDeleted'] as bool,
+      productDetail: json['productDetail'] as String,
       unit: json['unit'] as String?,
     );
 
@@ -37,19 +38,10 @@ Map<String, dynamic> _$ProductDataToJson(ProductData instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'productDetail': instance.productDetail,
       'priceOriginal': instance.priceOriginal,
       'priceSale': instance.priceSale,
       'imageUrl': instance.imageUrl,
       'isDeleted': instance.isDeleted,
       'unit': instance.unit,
-    };
-
-ErrorData _$ErrorDataFromJson(Map<String, dynamic> json) => ErrorData(
-      errorCode: json['errorCode'] as String?,
-      errorMessage: json['errorMessage'] as String?,
-    );
-
-Map<String, dynamic> _$ErrorDataToJson(ErrorData instance) => <String, dynamic>{
-      'errorCode': instance.errorCode,
-      'errorMessage': instance.errorMessage,
     };

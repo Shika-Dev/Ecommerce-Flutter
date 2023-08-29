@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.dart';
+import 'package:ecom_web_flutter/firebase_options.dart';
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/pages/account_page.dart';
 import 'package:ecom_web_flutter/pages/calculator_page.dart';
+import 'package:ecom_web_flutter/pages/cart_page.dart';
 import 'package:ecom_web_flutter/pages/shop_page.dart';
+import 'package:ecom_web_flutter/style/currency_format.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/auth.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
@@ -12,10 +16,15 @@ import 'package:ecom_web_flutter/utils/size.dart';
 import 'package:ecom_web_flutter/widget/contact.dart';
 import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'api_repository/models/models.dart';
 
 void main() async {
   await setupLocator();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -30,7 +39,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/account': (context) => const AccountPage(),
         '/calc': (context) => const Calculator(),
-        '/shop': (context) => const ShopPage()
+        '/shop': (context) => const ShopPage(),
+        '/cart': (context) => const CartPage()
       },
       theme: ThemeData(fontFamily: 'JosefinSans'),
     );
@@ -105,24 +115,70 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       drawer: NavDrawer(
         index: 0,
       ),
-      body: LayoutBuilder(
-        builder: (context, constraint) {
-          if (constraint.maxWidth > 600 && constraint.maxWidth < 1200)
-            return mediumLayout();
-          else if (constraint.maxWidth > 1200)
-            return largeLayout();
-          else
-            return smallLayout();
-        },
-      ),
+      body: FutureBuilder(
+          future: fetchFeaturedProduct(),
+          builder: (context, model) {
+            if (model.hasData) {
+              var list = model.data!.data!;
+              return LayoutBuilder(
+                builder: (context, constraint) {
+                  if (constraint.maxWidth > 600 && constraint.maxWidth < 1200)
+                    return mediumLayout(list);
+                  else if (constraint.maxWidth > 1200)
+                    return largeLayout(list);
+                  else
+                    return smallLayout(list);
+                },
+              );
+            }
+            return SizedBox();
+          }),
     );
   }
 
-  Widget largeLayout() {
+  Widget largeLayout(List<ProductData> list) {
+    int page = (list.length / 4).floor();
+    List<Widget> listWidget = List.empty(growable: true);
+    for (int counter = 0, i = 0; i < page; i++) {
+      listWidget.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          OnHoverProduct(
+            imageUrl: list[counter].imageUrl,
+            code: list[counter].id.toString(),
+            title: list[counter].name,
+            price: CurrencyFormat.convertToIdr(list[counter].priceOriginal, 0),
+          ),
+          OnHoverProduct(
+            imageUrl: list[counter].imageUrl,
+            code: list[counter + 1].id.toString(),
+            title: list[counter + 1].name,
+            price:
+                CurrencyFormat.convertToIdr(list[counter + 1].priceOriginal, 0),
+          ),
+          OnHoverProduct(
+            imageUrl: list[counter].imageUrl,
+            code: list[counter + 2].id.toString(),
+            title: list[counter + 2].name,
+            price:
+                CurrencyFormat.convertToIdr(list[counter + 2].priceOriginal, 0),
+          ),
+          OnHoverProduct(
+            imageUrl: list[counter].imageUrl,
+            code: list[counter + 3].id.toString(),
+            title: list[counter + 3].name,
+            price:
+                CurrencyFormat.convertToIdr(list[counter + 3].priceOriginal, 0),
+          ),
+        ],
+      ));
+      counter += 4;
+    }
     return Column(
       children: <Widget>[
         ContactBar(),
@@ -141,14 +197,81 @@ class _HomePageState extends State<HomePage> {
                 right: SizeConfig.safeBlockHorizontal * 10,
                 top: 20),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  item('Cantilever chair', '\$26.00', '\$42.00'),
-                  item('Cantilever chair', '\$26.00', '\$42.00'),
-                  item('Cantilever chair', '\$26.00', '\$42.00'),
-                  item('Cantilever chair', '\$26.00', '\$42.00'),
-                ],
+              Visibility(
+                visible: list.length <= 4 && list.isNotEmpty,
+                replacement: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Visibility(
+                      visible: list[0].priceSale != 0,
+                      replacement: item(
+                          list[0].name,
+                          CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
+                          null,
+                          url: list[0].imageUrl),
+                      child: item(
+                          list[0].name,
+                          CurrencyFormat.convertToIdr(list[0].priceSale, 0),
+                          CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
+                          url: list[0].imageUrl),
+                    ),
+                    Visibility(
+                      visible: list[1].priceSale != 0,
+                      replacement: item(
+                          list[1].name,
+                          CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
+                          null,
+                          url: list[1].imageUrl),
+                      child: item(
+                          list[1].name,
+                          CurrencyFormat.convertToIdr(list[1].priceSale, 0),
+                          CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
+                          url: list[1].imageUrl),
+                    ),
+                    Visibility(
+                      visible: list[2].priceSale != 0,
+                      replacement: item(
+                          list[2].name,
+                          CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
+                          null,
+                          url: list[2].imageUrl),
+                      child: item(
+                          list[2].name,
+                          CurrencyFormat.convertToIdr(list[2].priceSale, 0),
+                          CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
+                          url: list[2].imageUrl),
+                    ),
+                    Visibility(
+                      visible: list[3].priceSale != 0,
+                      replacement: item(
+                          list[3].name,
+                          CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
+                          null,
+                          url: list[3].imageUrl),
+                      child: item(
+                          list[3].name,
+                          CurrencyFormat.convertToIdr(list[3].priceSale, 0),
+                          CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
+                          url: list[3].imageUrl),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ...list.map((e) => e.priceSale == 0
+                        ? item(
+                            e.name,
+                            CurrencyFormat.convertToIdr(e.priceOriginal, 0),
+                            null,
+                            url: e.imageUrl)
+                        : item(
+                            e.name,
+                            CurrencyFormat.convertToIdr(e.priceSale, 0),
+                            CurrencyFormat.convertToIdr(e.priceOriginal, 0),
+                            url: e.imageUrl))
+                  ],
+                ),
               ),
               VerticalSeparator(height: 5),
               IntrinsicHeight(
@@ -461,108 +584,7 @@ class _HomePageState extends State<HomePage> {
                 child: PageView(
                   pageSnapping: false,
                   controller: _pageController,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        ),
-                        OnHoverProduct(
-                          code: 'Y523201',
-                          title: 'Cantilever chair',
-                          price: '\$42.00',
-                        )
-                      ],
-                    ),
-                  ],
+                  children: [...listWidget],
                 ),
               ),
               VerticalSeparator(height: 5),
@@ -593,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     separatorBuilder: (context, index) =>
                         HorizontalSeparator(width: 1),
-                    itemCount: 4,
+                    itemCount: page,
                   ),
                 ),
               ),
@@ -701,7 +723,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget mediumLayout() {
+  Widget mediumLayout(List<ProductData> list) {
+    int page = (list.length / 4).floor();
+    List<Widget> listWidget = List.empty(growable: true);
+    for (int counter = 0, i = 0; i < page; i++) {
+      listWidget.add(Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OnHoverProduct(
+                imageUrl: list[counter].imageUrl,
+                code: list[counter].id.toString(),
+                title: list[counter].name,
+                width: SizeConfig.safeBlockHorizontal * 35,
+                price:
+                    CurrencyFormat.convertToIdr(list[counter].priceOriginal, 0),
+              ),
+              OnHoverProduct(
+                imageUrl: list[counter].imageUrl,
+                code: list[counter + 1].id.toString(),
+                title: list[counter + 1].name,
+                width: SizeConfig.safeBlockHorizontal * 35,
+                price: CurrencyFormat.convertToIdr(
+                    list[counter + 1].priceOriginal, 0),
+              ),
+            ],
+          ),
+          VerticalSeparator(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OnHoverProduct(
+                imageUrl: list[counter].imageUrl,
+                code: list[counter + 2].id.toString(),
+                title: list[counter + 2].name,
+                width: SizeConfig.safeBlockHorizontal * 35,
+                price: CurrencyFormat.convertToIdr(
+                    list[counter + 2].priceOriginal, 0),
+              ),
+              OnHoverProduct(
+                imageUrl: list[counter].imageUrl,
+                code: list[counter + 3].id.toString(),
+                title: list[counter + 3].name,
+                width: SizeConfig.safeBlockHorizontal * 35,
+                price: CurrencyFormat.convertToIdr(
+                    list[counter + 3].priceOriginal, 0),
+              ),
+            ],
+          ),
+        ],
+      ));
+      counter += 4;
+    }
     return Column(
       children: <Widget>[
         ContactBar(),
@@ -720,24 +794,29 @@ class _HomePageState extends State<HomePage> {
                 right: SizeConfig.safeBlockHorizontal * 10,
                 top: 20),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  item('Cantilever chair', '\$26.00', '\$42.00',
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisSpacing: SizeConfig.safeBlockVertical * 5,
+                    crossAxisSpacing: SizeConfig.safeBlockHorizontal * 5,
+                    crossAxisCount: 2),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => Visibility(
+                  visible: list[index].priceSale != 0,
+                  replacement: item(
+                      list[index].name,
+                      CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
+                      null,
+                      url: list[index].imageUrl,
                       width: SizeConfig.safeBlockHorizontal * 30),
-                  item('Cantilever chair', '\$26.00', '\$42.00',
+                  child: item(
+                      list[index].name,
+                      CurrencyFormat.convertToIdr(list[index].priceSale, 0),
+                      CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
+                      url: list[index].imageUrl,
                       width: SizeConfig.safeBlockHorizontal * 30),
-                ],
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  item('Cantilever chair', '\$26.00', '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 30),
-                  item('Cantilever chair', '\$26.00', '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 30),
-                ],
+                ),
+                itemCount: list.length > 4 ? 4 : list.length,
               ),
               VerticalSeparator(height: 5),
               Container(
@@ -1044,164 +1123,7 @@ class _HomePageState extends State<HomePage> {
                 child: PageView(
                   pageSnapping: false,
                   controller: _pageController,
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            ),
-                            OnHoverProduct(
-                              code: 'Y523201',
-                              title: 'Cantilever chair',
-                              price: '\$42.00',
-                              width: SizeConfig.safeBlockHorizontal * 35,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                  children: [...listWidget],
                 ),
               ),
               VerticalSeparator(height: 5),
@@ -1232,7 +1154,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     separatorBuilder: (context, index) =>
                         HorizontalSeparator(width: 1),
-                    itemCount: 4,
+                    itemCount: page,
                   ),
                 ),
               ),
@@ -1395,7 +1317,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget smallLayout() {
+  Widget smallLayout(List<ProductData> list) {
+    int page = list.length > 4 ? 4 : list.length;
+    List<Widget> listWidget = List.empty(growable: true);
+    for (int i = 0; i < page; i++) {
+      listWidget.add(OnHoverProduct(
+        imageUrl: list[i].imageUrl,
+        code: list[i].id.toString(),
+        title: list[i].name,
+        price: CurrencyFormat.convertToIdr(list[i].priceOriginal, 0),
+        width: SizeConfig.safeBlockHorizontal * 80,
+      ));
+    }
     return Column(
       children: <Widget>[
         ContactBar(),
@@ -1414,17 +1347,81 @@ class _HomePageState extends State<HomePage> {
                 right: SizeConfig.safeBlockHorizontal * 10,
                 top: 20),
             children: [
-              item('Cantilever chair', '\$26.00', '\$42.00',
-                  width: SizeConfig.safeBlockHorizontal * 80),
+              Visibility(
+                visible: list.length >= 1,
+                child: Visibility(
+                  visible: list[0].priceSale != 0,
+                  replacement: item(
+                      list[0].name,
+                      CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
+                      null,
+                      url: list[0].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                  child: item(
+                      list[0].name,
+                      CurrencyFormat.convertToIdr(list[0].priceSale, 0),
+                      CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
+                      url: list[0].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                ),
+              ),
               VerticalSeparator(height: 2),
-              item('Cantilever chair', '\$26.00', '\$42.00',
-                  width: SizeConfig.safeBlockHorizontal * 80),
+              Visibility(
+                visible: list.length >= 2,
+                child: Visibility(
+                  visible: list[1].priceSale != 0,
+                  replacement: item(
+                      list[1].name,
+                      CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
+                      null,
+                      url: list[1].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                  child: item(
+                      list[1].name,
+                      CurrencyFormat.convertToIdr(list[1].priceSale, 0),
+                      CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
+                      url: list[1].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                ),
+              ),
               VerticalSeparator(height: 2),
-              item('Cantilever chair', '\$26.00', '\$42.00',
-                  width: SizeConfig.safeBlockHorizontal * 80),
+              Visibility(
+                visible: list.length >= 3,
+                child: Visibility(
+                  visible: list[2].priceSale != 0,
+                  replacement: item(
+                      list[2].name,
+                      CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
+                      null,
+                      url: list[2].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                  child: item(
+                      list[2].name,
+                      CurrencyFormat.convertToIdr(list[2].priceSale, 0),
+                      CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
+                      url: list[2].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                ),
+              ),
               VerticalSeparator(height: 2),
-              item('Cantilever chair', '\$26.00', '\$42.00',
-                  width: SizeConfig.safeBlockHorizontal * 80),
+              Visibility(
+                visible: list.length >= 4,
+                child: Visibility(
+                  visible: list[3].priceSale != 0,
+                  replacement: item(
+                      list[3].name,
+                      CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
+                      null,
+                      url: list[3].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                  child: item(
+                      list[3].name,
+                      CurrencyFormat.convertToIdr(list[3].priceSale, 0),
+                      CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
+                      url: list[3].imageUrl,
+                      width: SizeConfig.safeBlockHorizontal * 80),
+                ),
+              ),
               VerticalSeparator(height: 5),
               Container(
                 width: SizeConfig.safeBlockHorizontal * 30,
@@ -1714,32 +1711,7 @@ class _HomePageState extends State<HomePage> {
                 child: PageView(
                   pageSnapping: false,
                   controller: _pageController,
-                  children: [
-                    OnHoverProduct(
-                      code: 'Y523201',
-                      title: 'Cantilever chair',
-                      price: '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 80,
-                    ),
-                    OnHoverProduct(
-                      code: 'Y523201',
-                      title: 'Cantilever chair',
-                      price: '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 80,
-                    ),
-                    OnHoverProduct(
-                      code: 'Y523201',
-                      title: 'Cantilever chair',
-                      price: '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 80,
-                    ),
-                    OnHoverProduct(
-                      code: 'Y523201',
-                      title: 'Cantilever chair',
-                      price: '\$42.00',
-                      width: SizeConfig.safeBlockHorizontal * 80,
-                    ),
-                  ],
+                  children: [...listWidget],
                 ),
               ),
               VerticalSeparator(height: 5),
@@ -1770,7 +1742,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     separatorBuilder: (context, index) =>
                         HorizontalSeparator(width: 1),
-                    itemCount: 4,
+                    itemCount: page,
                   ),
                 ),
               ),
@@ -1842,7 +1814,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget item(String title, String price, String? oldPrice, {double? width}) {
+  Widget item(String title, String price, String? oldPrice,
+      {double? width, required String url}) {
     return Container(
       padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 33),
       decoration: BoxDecoration(
@@ -1855,7 +1828,9 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: width ?? SizeConfig.safeBlockHorizontal * 15,
             height: SizeConfig.safeBlockVertical * 20,
-            color: Color(0xffF5F6F8),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(url), fit: BoxFit.cover)),
           ),
           VerticalSeparator(height: 1),
           Text(title,
@@ -1907,11 +1882,13 @@ class OnHoverProduct extends StatefulWidget {
   final String price;
   final String code;
   final double? width;
+  final String imageUrl;
   const OnHoverProduct(
       {Key? key,
       required this.code,
       required this.title,
       required this.price,
+      required this.imageUrl,
       this.width})
       : super(key: key);
 
@@ -1941,7 +1918,9 @@ class _OnHoverProductState extends State<OnHoverProduct> {
             Container(
               width: widget.width ?? SizeConfig.safeBlockHorizontal * 15,
               height: SizeConfig.safeBlockVertical * 25,
-              color: Color(0xffF6F7FB),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(widget.imageUrl), fit: BoxFit.cover)),
               padding: EdgeInsets.all(11),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

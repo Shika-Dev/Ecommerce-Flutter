@@ -35,6 +35,7 @@ class _AccountPageState extends State<AccountPage> {
     SizeConfig().init(context);
     return Scaffold(
         key: _scaffoldKey,
+        backgroundColor: Colors.white,
         drawer: NavDrawer(
           index: 5,
         ),

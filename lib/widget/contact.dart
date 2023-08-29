@@ -25,7 +25,7 @@ class _ContactBarState extends State<ContactBar> {
             size: 16,
           ),
           HorizontalSeparator(width: 1),
-          Text('lorem@gmail.com',
+          Text('sevva.co.id@gmail.com',
               style: CusTextStyle.bodyText
                   .copyWith(color: Colors.white, fontWeight: FontWeight.w500)),
           Spacer(),
@@ -35,7 +35,7 @@ class _ContactBarState extends State<ContactBar> {
             size: 16,
           ),
           HorizontalSeparator(width: 1),
-          Text('(12345)67890',
+          Text('0819 1888 7333',
               style: CusTextStyle.bodyText
                   .copyWith(color: Colors.white, fontWeight: FontWeight.w500)),
         ],

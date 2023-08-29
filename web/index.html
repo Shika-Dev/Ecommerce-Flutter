@@ -19,6 +19,8 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
+  <meta name="google-signin-client_id" content="118312898892-9qu1j70ftkqsr7rrqivag0ajoavf7stn.apps.googleusercontent.com">
+
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -55,5 +57,36 @@
       });
     });
   </script>
+  <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js"></script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8jnUhDFKo4Zmz_Hu16xGoQlzD649XxrQ",
+    authDomain: "metronom-ecommerce-stg.firebaseapp.com",
+    projectId: "metronom-ecommerce-stg",
+    storageBucket: "metronom-ecommerce-stg.appspot.com",
+    messagingSenderId: "118312898892",
+    appId: "1:118312898892:web:010e9ae7b66b54e2303fe9",
+    measurementId: "G-RCDXHT4SNB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+  <script>
+    async function download() {
+      var pdfAsDataUri = "data:application/pdf;base64, " + pdfData;
+      var link = document.createElement('a');
+      link.download = filename;
+      link.href = pdfAsDataUri;
+      link.type = 'application/pdf';
+      link.click();
+    }
+</script>
 </body>
 </html>

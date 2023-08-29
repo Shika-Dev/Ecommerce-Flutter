@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 
-class ProductModel {
+class ProductCalculatorModel {
   int index;
-  String nama;
   int harga;
   int qty;
 
-  ProductModel(
-      {required this.nama,
-      required this.harga,
-      this.qty = 1,
-      required this.index});
+  ProductCalculatorModel(
+      {required this.harga, this.qty = 1, required this.index});
 }
 
 class CalculatorNotifier extends ChangeNotifier {
-  static List<ProductModel> products = List<ProductModel>.empty(growable: true);
+  static List<ProductCalculatorModel> products =
+      List<ProductCalculatorModel>.empty(growable: true);
 
-  List<ProductModel> get getProduct => products;
+  List<ProductCalculatorModel> get getProduct => products;
 
-  void addProduct(ProductModel product) {
+  void addProduct(ProductCalculatorModel product) {
     products.add(product);
     notifyListeners();
   }
 
-  void removeProduct(ProductModel product) {
+  void removeProduct(ProductCalculatorModel product) {
     products.remove(product);
     notifyListeners();
   }
 
-  void updateProduct({required int index, required ProductModel product}) {
-    products[index].nama = product.nama;
+  void updateProduct(
+      {required int index, required ProductCalculatorModel product}) {
     products[index].harga = product.harga;
     notifyListeners();
   }

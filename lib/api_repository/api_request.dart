@@ -12,42 +12,32 @@ Future<T> apiRequest<T, K>(String path,
     String? params}) async {
   final SharedPreferencesManager sharedPreferencesManager =
       locator<SharedPreferencesManager>();
-  // String? token = sharedPreferencesManager
-  //     .getString(SharedPreferencesManager.keyAccessToken);
-  String _baseUrl = 'https://jsonplaceholder.typicode.com/todos';
-  // Map<String, String> Header = useToken
-  //     ? {'Authorization': 'Bearer $token'}
-  //     : {
-  //         'Content-Type': 'application/json',
-  //         'Authorization':
-  //             'Basic dGVsa29tOmRlMThjZGYwLTBkOTYtNDliNS1hYWMwLTM4OWVmNjBiNDM3NA=='
-  //       };
+  String? token = sharedPreferencesManager
+      .getString(SharedPreferencesManager.keyAccessToken);
+  String _baseUrl = 'https://api-stg.sevva.co.id/api';
+  Map<String, String> Header = useToken
+      ? {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'}
+      : {'Content-Type': 'application/json'};
   if (params != null) path += params;
   print(method.toShortString() + ': ${_baseUrl + path}');
   if (method.toShortString() == 'GET') {
-    final response = await http.get(Uri.parse(_baseUrl + path));
-    print(response);
-    T model = Generic.fromJson(json.decode(response.body));
-    return model;
-  } else if (method.toShortString() == 'POST') {
-    print(body);
     final response =
-        await http.post(Uri.parse(_baseUrl + path), body: json.encode(body));
-    T model = Generic.fromJson(json.decode(response.body));
-    return model;
-  } else if (method.toShortString() == 'PUT') {
-    final response =
-        await http.put(Uri.parse(_baseUrl + path), body: json.encode(body));
+        await http.get(Uri.parse(_baseUrl + path), headers: Header);
+    print(response.body);
     T model = Generic.fromJson(json.decode(response.body));
     return model;
   } else {
-    final response = await http.delete(Uri.parse(_baseUrl + path));
+    print('Body: ${body}');
+    final response = await http.post(Uri.parse(_baseUrl + path),
+        body: json.encode(body), headers: Header);
+    print('Response: ${response.body}');
+    print('StatusCode: ${response.statusCode}');
     T model = Generic.fromJson(json.decode(response.body));
     return model;
   }
 }
 
-enum HttpMethod { GET, POST, PUT, DELETE }
+enum HttpMethod { GET, POST }
 
 extension ParseToString on HttpMethod {
   String toShortString() {
@@ -62,6 +52,12 @@ class Generic {
       return _fromJsonList<K>(json) as T;
     } else if (T == ProductModel) {
       return ProductModel.fromJson(json) as T;
+    } else if (T == PostResponseModel) {
+      return PostResponseModel.fromJson(json) as T;
+    } else if (T == SignInModel) {
+      return SignInModel.fromJson(json) as T;
+    } else if (T == CartModel) {
+      return CartModel.fromJson(json) as T;
     } else if (T == bool || T == String || T == int || T == double) {
       // primitives
       return json;
