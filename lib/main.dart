@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Metronome SoundSystem',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
@@ -197,82 +198,98 @@ class _HomePageState extends State<HomePage> {
                 right: SizeConfig.safeBlockHorizontal * 10,
                 top: 20),
             children: [
-              Visibility(
-                visible: list.length <= 4 && list.isNotEmpty,
-                replacement: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Visibility(
-                      visible: list[0].priceSale != 0,
-                      replacement: item(
-                          list[0].name,
-                          CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
-                          null,
-                          url: list[0].imageUrl),
-                      child: item(
-                          list[0].name,
-                          CurrencyFormat.convertToIdr(list[0].priceSale, 0),
-                          CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
-                          url: list[0].imageUrl),
-                    ),
-                    Visibility(
-                      visible: list[1].priceSale != 0,
-                      replacement: item(
-                          list[1].name,
-                          CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
-                          null,
-                          url: list[1].imageUrl),
-                      child: item(
-                          list[1].name,
-                          CurrencyFormat.convertToIdr(list[1].priceSale, 0),
-                          CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
-                          url: list[1].imageUrl),
-                    ),
-                    Visibility(
-                      visible: list[2].priceSale != 0,
-                      replacement: item(
-                          list[2].name,
-                          CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
-                          null,
-                          url: list[2].imageUrl),
-                      child: item(
-                          list[2].name,
-                          CurrencyFormat.convertToIdr(list[2].priceSale, 0),
-                          CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
-                          url: list[2].imageUrl),
-                    ),
-                    Visibility(
-                      visible: list[3].priceSale != 0,
-                      replacement: item(
-                          list[3].name,
-                          CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
-                          null,
-                          url: list[3].imageUrl),
-                      child: item(
-                          list[3].name,
-                          CurrencyFormat.convertToIdr(list[3].priceSale, 0),
-                          CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
-                          url: list[3].imageUrl),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ...list.map((e) => e.priceSale == 0
-                        ? item(
-                            e.name,
-                            CurrencyFormat.convertToIdr(e.priceOriginal, 0),
-                            null,
-                            url: e.imageUrl)
-                        : item(
-                            e.name,
-                            CurrencyFormat.convertToIdr(e.priceSale, 0),
-                            CurrencyFormat.convertToIdr(e.priceOriginal, 0),
-                            url: e.imageUrl))
-                  ],
-                ),
-              ),
+              list.isNotEmpty
+                  ? Visibility(
+                      visible: list.length <= 4,
+                      replacement: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Visibility(
+                            visible: list[0].priceSale != 0,
+                            replacement: item(
+                                list[0].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[0].priceOriginal, 0),
+                                null,
+                                url: list[0].imageUrl),
+                            child: item(
+                                list[0].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[0].priceSale, 0),
+                                CurrencyFormat.convertToIdr(
+                                    list[0].priceOriginal, 0),
+                                url: list[0].imageUrl),
+                          ),
+                          Visibility(
+                            visible: list[1].priceSale != 0,
+                            replacement: item(
+                                list[1].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[1].priceOriginal, 0),
+                                null,
+                                url: list[1].imageUrl),
+                            child: item(
+                                list[1].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[1].priceSale, 0),
+                                CurrencyFormat.convertToIdr(
+                                    list[1].priceOriginal, 0),
+                                url: list[1].imageUrl),
+                          ),
+                          Visibility(
+                            visible: list[2].priceSale != 0,
+                            replacement: item(
+                                list[2].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[2].priceOriginal, 0),
+                                null,
+                                url: list[2].imageUrl),
+                            child: item(
+                                list[2].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[2].priceSale, 0),
+                                CurrencyFormat.convertToIdr(
+                                    list[2].priceOriginal, 0),
+                                url: list[2].imageUrl),
+                          ),
+                          Visibility(
+                            visible: list[3].priceSale != 0,
+                            replacement: item(
+                                list[3].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[3].priceOriginal, 0),
+                                null,
+                                url: list[3].imageUrl),
+                            child: item(
+                                list[3].name,
+                                CurrencyFormat.convertToIdr(
+                                    list[3].priceSale, 0),
+                                CurrencyFormat.convertToIdr(
+                                    list[3].priceOriginal, 0),
+                                url: list[3].imageUrl),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ...list.map((e) => e.priceSale == 0
+                              ? item(
+                                  e.name,
+                                  CurrencyFormat.convertToIdr(
+                                      e.priceOriginal, 0),
+                                  null,
+                                  url: e.imageUrl)
+                              : item(
+                                  e.name,
+                                  CurrencyFormat.convertToIdr(e.priceSale, 0),
+                                  CurrencyFormat.convertToIdr(
+                                      e.priceOriginal, 0),
+                                  url: e.imageUrl))
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
               VerticalSeparator(height: 5),
               IntrinsicHeight(
                 child: Row(
@@ -808,13 +825,13 @@ class _HomePageState extends State<HomePage> {
                       CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
                       null,
                       url: list[index].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 30),
+                      width: SizeConfig.safeBlockHorizontal * 25),
                   child: item(
                       list[index].name,
                       CurrencyFormat.convertToIdr(list[index].priceSale, 0),
                       CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
                       url: list[index].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 30),
+                      width: SizeConfig.safeBlockHorizontal * 25),
                 ),
                 itemCount: list.length > 4 ? 4 : list.length,
               ),
@@ -1347,81 +1364,97 @@ class _HomePageState extends State<HomePage> {
                 right: SizeConfig.safeBlockHorizontal * 10,
                 top: 20),
             children: [
-              Visibility(
-                visible: list.length >= 1,
-                child: Visibility(
-                  visible: list[0].priceSale != 0,
-                  replacement: item(
-                      list[0].name,
-                      CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
-                      null,
-                      url: list[0].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                  child: item(
-                      list[0].name,
-                      CurrencyFormat.convertToIdr(list[0].priceSale, 0),
-                      CurrencyFormat.convertToIdr(list[0].priceOriginal, 0),
-                      url: list[0].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                ),
-              ),
+              list.isNotEmpty
+                  ? Visibility(
+                      visible: list.length >= 1,
+                      child: Visibility(
+                        visible: list[0].priceSale != 0,
+                        replacement: item(
+                            list[0].name,
+                            CurrencyFormat.convertToIdr(
+                                list[0].priceOriginal, 0),
+                            null,
+                            url: list[0].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                        child: item(
+                            list[0].name,
+                            CurrencyFormat.convertToIdr(list[0].priceSale, 0),
+                            CurrencyFormat.convertToIdr(
+                                list[0].priceOriginal, 0),
+                            url: list[0].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                      ),
+                    )
+                  : SizedBox(),
               VerticalSeparator(height: 2),
-              Visibility(
-                visible: list.length >= 2,
-                child: Visibility(
-                  visible: list[1].priceSale != 0,
-                  replacement: item(
-                      list[1].name,
-                      CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
-                      null,
-                      url: list[1].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                  child: item(
-                      list[1].name,
-                      CurrencyFormat.convertToIdr(list[1].priceSale, 0),
-                      CurrencyFormat.convertToIdr(list[1].priceOriginal, 0),
-                      url: list[1].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                ),
-              ),
+              list.isNotEmpty
+                  ? Visibility(
+                      visible: list.length >= 2,
+                      child: Visibility(
+                        visible: list[1].priceSale != 0,
+                        replacement: item(
+                            list[1].name,
+                            CurrencyFormat.convertToIdr(
+                                list[1].priceOriginal, 0),
+                            null,
+                            url: list[1].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                        child: item(
+                            list[1].name,
+                            CurrencyFormat.convertToIdr(list[1].priceSale, 0),
+                            CurrencyFormat.convertToIdr(
+                                list[1].priceOriginal, 0),
+                            url: list[1].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                      ),
+                    )
+                  : SizedBox(),
               VerticalSeparator(height: 2),
-              Visibility(
-                visible: list.length >= 3,
-                child: Visibility(
-                  visible: list[2].priceSale != 0,
-                  replacement: item(
-                      list[2].name,
-                      CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
-                      null,
-                      url: list[2].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                  child: item(
-                      list[2].name,
-                      CurrencyFormat.convertToIdr(list[2].priceSale, 0),
-                      CurrencyFormat.convertToIdr(list[2].priceOriginal, 0),
-                      url: list[2].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                ),
-              ),
+              list.isNotEmpty
+                  ? Visibility(
+                      visible: list.length >= 3,
+                      child: Visibility(
+                        visible: list[2].priceSale != 0,
+                        replacement: item(
+                            list[2].name,
+                            CurrencyFormat.convertToIdr(
+                                list[2].priceOriginal, 0),
+                            null,
+                            url: list[2].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                        child: item(
+                            list[2].name,
+                            CurrencyFormat.convertToIdr(list[2].priceSale, 0),
+                            CurrencyFormat.convertToIdr(
+                                list[2].priceOriginal, 0),
+                            url: list[2].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                      ),
+                    )
+                  : SizedBox(),
               VerticalSeparator(height: 2),
-              Visibility(
-                visible: list.length >= 4,
-                child: Visibility(
-                  visible: list[3].priceSale != 0,
-                  replacement: item(
-                      list[3].name,
-                      CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
-                      null,
-                      url: list[3].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                  child: item(
-                      list[3].name,
-                      CurrencyFormat.convertToIdr(list[3].priceSale, 0),
-                      CurrencyFormat.convertToIdr(list[3].priceOriginal, 0),
-                      url: list[3].imageUrl,
-                      width: SizeConfig.safeBlockHorizontal * 80),
-                ),
-              ),
+              list.isNotEmpty
+                  ? Visibility(
+                      visible: list.length >= 4,
+                      child: Visibility(
+                        visible: list[3].priceSale != 0,
+                        replacement: item(
+                            list[3].name,
+                            CurrencyFormat.convertToIdr(
+                                list[3].priceOriginal, 0),
+                            null,
+                            url: list[3].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                        child: item(
+                            list[3].name,
+                            CurrencyFormat.convertToIdr(list[3].priceSale, 0),
+                            CurrencyFormat.convertToIdr(
+                                list[3].priceOriginal, 0),
+                            url: list[3].imageUrl,
+                            width: SizeConfig.safeBlockHorizontal * 80),
+                      ),
+                    )
+                  : SizedBox(),
               VerticalSeparator(height: 5),
               Container(
                 width: SizeConfig.safeBlockHorizontal * 30,
@@ -1594,108 +1627,129 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               VerticalSeparator(height: 10),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                decoration: BoxDecoration(
-                    color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  children: [
-                    Image.asset(Assets.images.icDelivery.path,
-                        width: SizeConfig.safeBlockHorizontal * 5,
-                        fit: BoxFit.fitWidth),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      '24/7 Support',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontSize: 22, fontWeight: FontWeight.w500),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: SizeConfig.safeBlockHorizontal * 35,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
+                    decoration: BoxDecoration(
+                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
+                    child: Column(
+                      children: [
+                        Image.asset(Assets.images.icDelivery.path,
+                            width: SizeConfig.safeBlockHorizontal * 5,
+                            fit: BoxFit.fitWidth),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          '24/7 Support',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          textAlign: TextAlign.center,
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 12,
+                              color: CusColor.disable,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
-                      textAlign: TextAlign.center,
-                      style: CusTextStyle.itemText.copyWith(
-                          color: CusColor.disable, fontWeight: FontWeight.w700),
+                  ),
+                  Container(
+                    width: SizeConfig.safeBlockHorizontal * 35,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
+                    decoration: BoxDecoration(
+                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
+                    child: Column(
+                      children: [
+                        Image.asset(Assets.images.icCashback.path,
+                            width: SizeConfig.safeBlockHorizontal * 5,
+                            fit: BoxFit.fitWidth),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          '24/7 Support',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          textAlign: TextAlign.center,
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 12,
+                              color: CusColor.disable,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               VerticalSeparator(height: 2),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                decoration: BoxDecoration(
-                    color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  children: [
-                    Image.asset(Assets.images.icCashback.path,
-                        width: SizeConfig.safeBlockHorizontal * 5,
-                        fit: BoxFit.fitWidth),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      '24/7 Support',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontSize: 22, fontWeight: FontWeight.w500),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: SizeConfig.safeBlockHorizontal * 35,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
+                    decoration: BoxDecoration(
+                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
+                    child: Column(
+                      children: [
+                        Image.asset(Assets.images.icPremium.path,
+                            width: SizeConfig.safeBlockHorizontal * 5,
+                            fit: BoxFit.fitWidth),
+                        HorizontalSeparator(width: 2),
+                        Text(
+                          '24/7 Support',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          textAlign: TextAlign.center,
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 12,
+                              color: CusColor.disable,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
-                      textAlign: TextAlign.center,
-                      style: CusTextStyle.itemText.copyWith(
-                          color: CusColor.disable, fontWeight: FontWeight.w700),
+                  ),
+                  VerticalSeparator(height: 2),
+                  Container(
+                    width: SizeConfig.safeBlockHorizontal * 35,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
+                    decoration: BoxDecoration(
+                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
+                    child: Column(
+                      children: [
+                        Image.asset(Assets.images.icCall24.path,
+                            width: SizeConfig.safeBlockHorizontal * 5,
+                            fit: BoxFit.fitWidth),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          '24/7 Support',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          textAlign: TextAlign.center,
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 12,
+                              color: CusColor.disable,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              VerticalSeparator(height: 2),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                decoration: BoxDecoration(
-                    color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  children: [
-                    Image.asset(Assets.images.icPremium.path,
-                        width: SizeConfig.safeBlockHorizontal * 5,
-                        fit: BoxFit.fitWidth),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      '24/7 Support',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontSize: 22, fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
-                      textAlign: TextAlign.center,
-                      style: CusTextStyle.itemText.copyWith(
-                          color: CusColor.disable, fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-              ),
-              VerticalSeparator(height: 2),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                decoration: BoxDecoration(
-                    color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  children: [
-                    Image.asset(Assets.images.icCall24.path,
-                        width: SizeConfig.safeBlockHorizontal * 5,
-                        fit: BoxFit.fitWidth),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      '24/7 Support',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontSize: 22, fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 2),
-                    Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
-                      textAlign: TextAlign.center,
-                      style: CusTextStyle.itemText.copyWith(
-                          color: CusColor.disable, fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               VerticalSeparator(height: 10),
               Center(
@@ -1827,7 +1881,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             width: width ?? SizeConfig.safeBlockHorizontal * 15,
-            height: SizeConfig.safeBlockVertical * 20,
+            height: width ?? SizeConfig.safeBlockHorizontal * 15,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(url), fit: BoxFit.cover)),

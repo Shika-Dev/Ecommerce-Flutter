@@ -16,7 +16,7 @@ class _ContactBarState extends State<ContactBar> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
-      color: CusColor.green,
+      color: CusColor.black,
       child: Row(
         children: [
           Icon(

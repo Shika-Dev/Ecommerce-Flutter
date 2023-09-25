@@ -19,6 +19,7 @@ import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class CartPage extends StatefulWidget {
@@ -33,6 +34,10 @@ class _CartPageState extends State<CartPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
+  DateRangePickerController rangePickerController = DateRangePickerController();
+
+  int _startDate = 0;
+  int _endDate = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -44,8 +49,8 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  Future<void> _createPDF(
-      List<CartData> list, String name, String alamat, String mobile) async {
+  Future<void> _createPDF(List<Cart> list, String name, String alamat,
+      String mobile, int totalPrice, int start, int end) async {
     PdfDocument document = PdfDocument();
 
     //Adds page settings
@@ -65,7 +70,7 @@ class _CartPageState extends State<CartPage> {
     Rect company_bounds = Rect.fromLTWH(0, 0, graphics.clientSize.width, 30);
 
     PdfTextElement element = PdfTextElement(
-        text: 'Sevva',
+        text: 'Metronome SoundSystem',
         font: PdfStandardFont(PdfFontFamily.timesRoman, 24,
             style: PdfFontStyle.bold));
 
@@ -158,6 +163,19 @@ class _CartPageState extends State<CartPage> {
     result = element.draw(
         page: page, bounds: Rect.fromLTWH(10, result.bounds.bottom + 5, 0, 0))!;
 
+    print('Start: $start, End: $end');
+    String sDate = DateFormat('dd MMMM yyyy')
+        .format(DateTime.fromMillisecondsSinceEpoch(start))
+        .toString();
+    String eDate = DateFormat('dd MMMM yyyy')
+        .format(DateTime.fromMillisecondsSinceEpoch(end))
+        .toString();
+    element = PdfTextElement(
+        text: 'Tanggal Event: $sDate - $eDate', font: timesRoman);
+    element.brush = PdfBrushes.black;
+    result = element.draw(
+        page: page, bounds: Rect.fromLTWH(10, result.bounds.bottom + 5, 0, 0))!;
+
 //Draws a line at the bottom of the address
     graphics.drawLine(
         PdfPen(PdfColor(126, 151, 173), width: 0.7),
@@ -216,13 +234,11 @@ class _CartPageState extends State<CartPage> {
 
     PdfGridRow subtotal_row = grid.rows.add();
     subtotal_row.cells[3].value = 'Subtotal';
-    subtotal_row.cells[4].value =
-        CurrencyFormat.convertToIdr(list[0].totalPrice, 0);
+    subtotal_row.cells[4].value = CurrencyFormat.convertToIdr(totalPrice, 0);
 
     PdfGridRow total_row = grid.rows.add();
     total_row.cells[3].value = 'Total';
-    total_row.cells[4].value =
-        CurrencyFormat.convertToIdr(list[0].totalPrice, 0);
+    total_row.cells[4].value = CurrencyFormat.convertToIdr(totalPrice, 0);
 
     //Set padding for grid cells
     grid.style.cellPadding = PdfPaddings(left: 2, right: 2, top: 2, bottom: 2);
@@ -310,7 +326,8 @@ class _CartPageState extends State<CartPage> {
             future: fetchUserCart(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                List<CartData> list = snapshot.data!.data ?? [];
+                int totalPrice = snapshot.data!.data?.totalCartPrice ?? 0;
+                List<Cart> list = snapshot.data!.data?.cartData ?? [];
                 List<TextEditingController> listQtyController = list.isNotEmpty
                     ? List.generate(
                         list.length,
@@ -326,11 +343,11 @@ class _CartPageState extends State<CartPage> {
                 return LayoutBuilder(
                   builder: (context, constraint) {
                     if (constraint.maxWidth > 900)
-                      return largeWidget(
-                          list, listQtyController, listNoteController);
+                      return largeWidget(totalPrice, list, listQtyController,
+                          listNoteController);
                     else
-                      return smallWidget(
-                          list, listQtyController, listNoteController);
+                      return smallWidget(totalPrice, list, listQtyController,
+                          listNoteController);
                   },
                 );
               }
@@ -338,12 +355,49 @@ class _CartPageState extends State<CartPage> {
             }));
   }
 
-  Widget item(CartData cartItem, TextEditingController qtyController,
-      TextEditingController noteController) {
+  Widget item(Cart cartItem, TextEditingController qtyController,
+      TextEditingController noteController, int totalPrice) {
     return Column(
       children: [
         Row(
           children: [
+            GestureDetector(
+                onTap: () async {
+                  SharedPreferencesManager pref =
+                      locator<SharedPreferencesManager>();
+                  bool isLogin =
+                      pref.getBool(SharedPreferencesManager.keyAuth) ?? false;
+                  if (isLogin) {
+                    Map<String, dynamic> body = {
+                      'productId': cartItem.productId
+                    };
+                    var model = await deleteFromCart(body);
+                    if (!model.errors.isNull) {
+                      Navigator.pushReplacementNamed(context, '/cart');
+                    } else {
+                      print(model.errors.toString());
+                    }
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                                "Akses anda telah habis silahkan login ulang untuk memperbaharui akses"),
+                            actions: [
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        });
+                  }
+                },
+                child: Icon(Icons.delete_outline_rounded, color: CusColor.red)),
+            HorizontalSeparator(width: 2),
             Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
@@ -479,7 +533,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   Widget largeWidget(
-      List<CartData> list,
+      int totalPrice,
+      List<Cart> list,
       List<TextEditingController> listQtyController,
       List<TextEditingController> listNoteController) {
     return Column(
@@ -539,7 +594,8 @@ class _CartPageState extends State<CartPage> {
                           ...list.map((e) => item(
                               e,
                               listQtyController[list.indexOf(e)],
-                              listNoteController[list.indexOf(e)])),
+                              listNoteController[list.indexOf(e)],
+                              totalPrice)),
                           SizedBox(
                             height: 40,
                             child: ElevatedButton(
@@ -585,14 +641,37 @@ class _CartPageState extends State<CartPage> {
                               maxLines: 3,
                               onChanged: (value) {},
                             ),
+                            VerticalSeparator(height: 2),
+                            Text('Masukkan Tanggal Event:'),
+                            SfDateRangePicker(
+                              selectionMode: DateRangePickerSelectionMode.range,
+                              showNavigationArrow: true,
+                              onSelectionChanged: (args) {
+                                setState(() {
+                                  _startDate = args
+                                      .value.startDate.millisecondsSinceEpoch;
+                                });
+                                if (args.value.endDate == null) {
+                                  setState(() {
+                                    _endDate = args
+                                        .value.startDate.millisecondsSinceEpoch;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _endDate = args
+                                        .value.endDate.millisecondsSinceEpoch;
+                                  });
+                                }
+                                print('StartSF: $_startDate, EndSF: $_endDate');
+                              },
+                            ),
                             VerticalSeparator(height: 3),
                             Row(
                               children: [
                                 Text('Subtotal:'),
                                 Spacer(),
-                                Text(CurrencyFormat.convertToIdr(
-                                    list.length > 0 ? list[0].totalPrice : 0,
-                                    0)),
+                                Text(
+                                    CurrencyFormat.convertToIdr(totalPrice, 0)),
                               ],
                             ),
                             VerticalSeparator(height: 1),
@@ -602,9 +681,8 @@ class _CartPageState extends State<CartPage> {
                               children: [
                                 Text('Total:'),
                                 Spacer(),
-                                Text(CurrencyFormat.convertToIdr(
-                                    list.length > 0 ? list[0].totalPrice : 0,
-                                    0)),
+                                Text(
+                                    CurrencyFormat.convertToIdr(totalPrice, 0)),
                               ],
                             ),
                             VerticalSeparator(height: 1),
@@ -620,7 +698,9 @@ class _CartPageState extends State<CartPage> {
                                   onPressed: () async {
                                     if (nameController.text.isEmpty ||
                                         alamatController.text.isEmpty ||
-                                        mobileController.text.isEmpty) {
+                                        mobileController.text.isEmpty ||
+                                        _startDate == 0 ||
+                                        _endDate == 0) {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -670,7 +750,10 @@ class _CartPageState extends State<CartPage> {
                                       Map<String, dynamic> body = {
                                         'productList': productList,
                                         'address': alamatController.text,
-                                        'phoneNo': mobileController.text
+                                        'phoneNo': mobileController.text,
+                                        'clientName': nameController.text,
+                                        'eventStartDate': _startDate.toString(),
+                                        'eventEndDate': _endDate.toString()
                                       };
                                       PostResponseModel response =
                                           await addOrder(body);
@@ -680,7 +763,10 @@ class _CartPageState extends State<CartPage> {
                                             list,
                                             nameController.text,
                                             alamatController.text,
-                                            mobileController.text);
+                                            mobileController.text,
+                                            totalPrice,
+                                            _startDate,
+                                            _endDate);
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -727,7 +813,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   Widget smallWidget(
-      List<CartData> list,
+      int totalPrice,
+      List<Cart> list,
       List<TextEditingController> listQtyController,
       List<TextEditingController> listNoteController) {
     return Column(
@@ -784,7 +871,8 @@ class _CartPageState extends State<CartPage> {
                       ...list.map((e) => item(
                           e,
                           listQtyController[list.indexOf(e)],
-                          listNoteController[list.indexOf(e)])),
+                          listNoteController[list.indexOf(e)],
+                          totalPrice)),
                       SizedBox(
                         height: 40,
                         child: ElevatedButton(
@@ -831,13 +919,36 @@ class _CartPageState extends State<CartPage> {
                         maxLines: 3,
                         onChanged: (value) {},
                       ),
+                      VerticalSeparator(height: 2),
+                      Text('Masukkan Tanggal Event:'),
+                      SfDateRangePicker(
+                        selectionMode: DateRangePickerSelectionMode.range,
+                        showNavigationArrow: true,
+                        onSelectionChanged: (args) {
+                          setState(() {
+                            _startDate =
+                                args.value.startDate.millisecondsSinceEpoch;
+                          });
+                          if (args.value.endDate == null) {
+                            setState(() {
+                              _endDate =
+                                  args.value.startDate.millisecondsSinceEpoch;
+                            });
+                          } else {
+                            setState(() {
+                              _endDate =
+                                  args.value.endDate.millisecondsSinceEpoch;
+                            });
+                          }
+                          print('Start SF: $_startDate, End SF: $_endDate');
+                        },
+                      ),
                       VerticalSeparator(height: 3),
                       Row(
                         children: [
                           Text('Subtotal:'),
                           Spacer(),
-                          Text(CurrencyFormat.convertToIdr(
-                              list.length > 0 ? list[0].totalPrice : 0, 0)),
+                          Text(CurrencyFormat.convertToIdr(totalPrice, 0)),
                         ],
                       ),
                       VerticalSeparator(height: 1),
@@ -847,8 +958,7 @@ class _CartPageState extends State<CartPage> {
                         children: [
                           Text('Total:'),
                           Spacer(),
-                          Text(CurrencyFormat.convertToIdr(
-                              list.length > 0 ? list[0].totalPrice : 0, 0)),
+                          Text(CurrencyFormat.convertToIdr(totalPrice, 0)),
                         ],
                       ),
                       VerticalSeparator(height: 1),
@@ -864,7 +974,9 @@ class _CartPageState extends State<CartPage> {
                             onPressed: () async {
                               if (nameController.text.isEmpty ||
                                   alamatController.text.isEmpty ||
-                                  mobileController.text.isEmpty) {
+                                  mobileController.text.isEmpty ||
+                                  _startDate == 0 ||
+                                  _endDate == 0) {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -913,7 +1025,10 @@ class _CartPageState extends State<CartPage> {
                                 Map<String, dynamic> body = {
                                   'productList': productList,
                                   'address': alamatController.text,
-                                  'phoneNo': mobileController.text
+                                  'phoneNo': mobileController.text,
+                                  'clientName': nameController.text,
+                                  'eventStartDate': _startDate.toString(),
+                                  'eventEndDate': _endDate.toString()
                                 };
                                 PostResponseModel response =
                                     await addOrder(body);
@@ -923,7 +1038,10 @@ class _CartPageState extends State<CartPage> {
                                       list,
                                       nameController.text,
                                       alamatController.text,
-                                      mobileController.text);
+                                      mobileController.text,
+                                      totalPrice,
+                                      _startDate,
+                                      _endDate);
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

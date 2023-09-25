@@ -10,9 +10,9 @@ CartModel _$CartModelFromJson(Map<String, dynamic> json) => CartModel(
       errors: json['errors'] == null
           ? null
           : ErrorData.fromJson(json['errors'] as Map<String, dynamic>),
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => CartData.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      data: json['data'] == null
+          ? null
+          : CartData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CartModelToJson(CartModel instance) => <String, dynamic>{
@@ -21,6 +21,18 @@ Map<String, dynamic> _$CartModelToJson(CartModel instance) => <String, dynamic>{
     };
 
 CartData _$CartDataFromJson(Map<String, dynamic> json) => CartData(
+      cartData: (json['cartData'] as List<dynamic>)
+          .map((e) => Cart.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      totalCartPrice: json['totalCartPrice'] as int,
+    );
+
+Map<String, dynamic> _$CartDataToJson(CartData instance) => <String, dynamic>{
+      'cartData': instance.cartData,
+      'totalCartPrice': instance.totalCartPrice,
+    };
+
+Cart _$CartFromJson(Map<String, dynamic> json) => Cart(
       productName: json['productName'] as String,
       productUnit: json['productUnit'] as String,
       totalPrice: json['totalPrice'] as int,
@@ -33,7 +45,7 @@ CartData _$CartDataFromJson(Map<String, dynamic> json) => CartData(
       isDeleted: json['isDeleted'] as bool,
     );
 
-Map<String, dynamic> _$CartDataToJson(CartData instance) => <String, dynamic>{
+Map<String, dynamic> _$CartToJson(Cart instance) => <String, dynamic>{
       'productName': instance.productName,
       'productUnit': instance.productUnit,
       'totalPrice': instance.totalPrice,

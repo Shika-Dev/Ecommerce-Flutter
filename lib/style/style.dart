@@ -21,6 +21,7 @@ class CusTextStyle {
 }
 
 class CusColor {
+  static Color black = Color(0xff000000);
   static Color darkBlue = Color(0xff1f475c);
   static Color blue = Color(0xff151875);
   static Color green = Color(0xff00605d);

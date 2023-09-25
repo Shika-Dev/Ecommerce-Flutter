@@ -9,7 +9,7 @@ class CartModel extends Equatable {
   const CartModel({this.errors, this.data});
 
   final ErrorData? errors;
-  final List<CartData>? data;
+  final CartData? data;
 
   factory CartModel.fromJson(Map<String, dynamic> json) =>
       _$CartModelFromJson(json);
@@ -21,6 +21,23 @@ class CartModel extends Equatable {
 @JsonSerializable()
 class CartData extends Equatable {
   const CartData({
+    required this.cartData,
+    required this.totalCartPrice,
+  });
+
+  final List<Cart> cartData;
+  final int totalCartPrice;
+
+  factory CartData.fromJson(Map<String, dynamic> json) =>
+      _$CartDataFromJson(json);
+
+  @override
+  List<Object?> get props => [cartData, totalCartPrice];
+}
+
+@JsonSerializable()
+class Cart extends Equatable {
+  const Cart({
     required this.productName,
     required this.productUnit,
     required this.totalPrice,
@@ -44,8 +61,7 @@ class CartData extends Equatable {
   final String imageUrl;
   final bool isDeleted;
 
-  factory CartData.fromJson(Map<String, dynamic> json) =>
-      _$CartDataFromJson(json);
+  factory Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);
 
   @override
   List<Object?> get props => [

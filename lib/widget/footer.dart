@@ -87,7 +87,7 @@ class _FooterState extends State<Footer> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            Assets.icons.sevvaLogo.path,
+            Assets.icons.sevvaLogoJpg.path,
             fit: BoxFit.fitWidth,
             width: 250,
           ),
@@ -141,7 +141,7 @@ class _FooterState extends State<Footer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
-            Assets.icons.sevvaLogo.path,
+            Assets.icons.sevvaLogoJpg.path,
             fit: BoxFit.fitWidth,
             width: 250,
           ),
@@ -159,11 +159,6 @@ class _FooterState extends State<Footer> {
           VerticalSeparator(height: 2),
           Text(
             'Shop',
-            style: CusTextStyle.navText.copyWith(color: CusColor.footerText),
-          ),
-          VerticalSeparator(height: 2),
-          Text(
-            'Calculator',
             style: CusTextStyle.navText.copyWith(color: CusColor.footerText),
           ),
           VerticalSeparator(height: 2),

@@ -14,7 +14,7 @@ Future<T> apiRequest<T, K>(String path,
       locator<SharedPreferencesManager>();
   String? token = sharedPreferencesManager
       .getString(SharedPreferencesManager.keyAccessToken);
-  String _baseUrl = 'https://api-stg.sevva.co.id/api';
+  String _baseUrl = 'https://api.sevva.co.id/api';
   Map<String, String> Header = useToken
       ? {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'}
       : {'Content-Type': 'application/json'};

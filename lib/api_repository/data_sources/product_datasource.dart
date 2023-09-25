@@ -38,6 +38,15 @@ Future<PostResponseModel> addToCart(Map<String, dynamic> body) async {
   return model;
 }
 
+Future<PostResponseModel> deleteFromCart(Map<String, dynamic> body) async {
+  PostResponseModel model = await apiRequest<PostResponseModel, void>(
+      '/cart/deleteone',
+      useToken: true,
+      body: body,
+      method: HttpMethod.POST);
+  return model;
+}
+
 Future<CartModel> fetchUserCart() async {
   CartModel model = await apiRequest<CartModel, void>('/cart/getbyuserid',
       useToken: true, method: HttpMethod.GET);

@@ -57,6 +57,8 @@ dependencies:
   colorize_text_avatar: ^1.0.2
   firebase_core: ^2.15.0
   syncfusion_flutter_pdf: ^21.2.4
+  syncfusion_flutter_datepicker: ^21.2.3
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   json_serializable: ^6.7.1

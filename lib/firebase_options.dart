@@ -53,12 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB8jnUhDFKo4Zmz_Hu16xGoQlzD649XxrQ',
-    appId: '1:118312898892:web:010e9ae7b66b54e2303fe9',
-    messagingSenderId: '118312898892',
-    projectId: 'metronom-ecommerce-stg',
-    authDomain: 'metronom-ecommerce-stg.firebaseapp.com',
-    storageBucket: 'metronom-ecommerce-stg.appspot.com',
-    measurementId: 'G-RCDXHT4SNB',
-  );
+      apiKey: "AIzaSyDXbzxOUp2U3D0LUSkLJsJFIpWOSWLuSyI",
+      authDomain: "metronom-ecommerce-prod.firebaseapp.com",
+      projectId: "metronom-ecommerce-prod",
+      storageBucket: "metronom-ecommerce-prod.appspot.com",
+      messagingSenderId: "837308985609",
+      appId: "1:837308985609:web:6af3bf26e85f83e7fc63d8",
+      measurementId: "G-QP3T0BDMVP");
 }

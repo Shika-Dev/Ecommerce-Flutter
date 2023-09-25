@@ -68,14 +68,6 @@ class _NavBarState extends State<NavBar> {
                     ? CusTextStyle.navText.copyWith(color: CusColor.green)
                     : CusTextStyle.navText),
           ),
-          HorizontalSeparator(width: 2),
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/calc'),
-            child: Text('Kalkulator',
-                style: widget.index == 3
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
-          ),
           Spacer(),
           Visibility(
             visible: _showSearch,
@@ -196,20 +188,6 @@ class _NavBarState extends State<NavBar> {
                       : CusTextStyle.navText),
             ),
           ),
-          Visibility(
-              visible: !_showSearch, child: HorizontalSeparator(width: 2)),
-          Visibility(
-            visible: !_showSearch,
-            child: GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/calc'),
-              child: Text('Kalkulator',
-                  style: widget.index == 3
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
-          ),
-          Visibility(
-              visible: !_showSearch, child: HorizontalSeparator(width: 2)),
           Spacer(),
           _showSearch
               ? Expanded(
@@ -406,14 +384,6 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () => Navigator.pushNamed(context, '/cart'),
               child: Text('Cart',
                   style: widget.index == 2
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
-            VerticalSeparator(height: 3),
-            GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/calc'),
-              child: Text('Kalkulator',
-                  style: widget.index == 3
                       ? CusTextStyle.navText.copyWith(color: CusColor.green)
                       : CusTextStyle.navText),
             ),
