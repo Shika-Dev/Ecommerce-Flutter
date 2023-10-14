@@ -7,10 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 const List<String> scopes = <String>['email', 'profile'];
 
-GoogleSignIn signIn = GoogleSignIn(
-    scopes: scopes,
-    clientId:
-        '837308985609-meh9l0lp19qed1rvc573v53jmce9q6lu.apps.googleusercontent.com');
+GoogleSignIn signIn = GoogleSignIn(scopes: scopes);
 
 Future<void> handleSignIn() async {
   try {
@@ -70,7 +67,8 @@ Future<void> silentSignIn() async {
 
   if (!isAuth) {
     try {
-      googleSignInAccount = await signIn.signInSilently(reAuthenticate: true);
+      googleSignInAccount = await signIn.signInSilently(
+          reAuthenticate: true, suppressErrors: false);
     } catch (error) {
       print('Error on silent sign-in: $error');
     }
