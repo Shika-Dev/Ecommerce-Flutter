@@ -23,15 +23,11 @@ Future<T> apiRequest<T, K>(String path,
   if (method.toShortString() == 'GET') {
     final response =
         await http.get(Uri.parse(_baseUrl + path), headers: Header);
-    print(response.body);
     T model = Generic.fromJson(json.decode(response.body));
     return model;
   } else {
-    print('Body: ${body}');
     final response = await http.post(Uri.parse(_baseUrl + path),
         body: json.encode(body), headers: Header);
-    print('Response: ${response.body}');
-    print('StatusCode: ${response.statusCode}');
     T model = Generic.fromJson(json.decode(response.body));
     return model;
   }
@@ -58,6 +54,8 @@ class Generic {
       return SignInModel.fromJson(json) as T;
     } else if (T == CartModel) {
       return CartModel.fromJson(json) as T;
+    } else if (T == CategoryModel) {
+      return CategoryModel.fromJson(json) as T;
     } else if (T == bool || T == String || T == int || T == double) {
       // primitives
       return json;

@@ -1,9 +1,9 @@
-import 'dart:js_interop';
-
 import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.dart';
 import 'package:ecom_web_flutter/api_repository/models/models.dart';
+import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
+import 'package:ecom_web_flutter/style/currency_format.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
 import 'package:ecom_web_flutter/utils/size.dart';
@@ -11,9 +11,11 @@ import 'package:ecom_web_flutter/widget/contact.dart';
 import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShopPage extends StatefulWidget {
-  const ShopPage({Key? key}) : super(key: key);
+  final String category;
+  const ShopPage({Key? key, required this.category}) : super(key: key);
 
   @override
   State<ShopPage> createState() => _ShopPageState();
@@ -41,8 +43,26 @@ class _ShopPageState extends State<ShopPage> {
         drawer: const NavDrawer(
           index: 1,
         ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            var whatsappUrl = "whatsapp://send?phone=+6281918887333";
+            try {
+              launch(whatsappUrl);
+            } catch (e) {
+              //To handle error and display error message
+              print('unable to open WhatsApp');
+            }
+          },
+          child: Image.asset(Assets.icons.waIcon.path,
+              isAntiAlias: true,
+              filterQuality: FilterQuality.medium,
+              width: 62,
+              fit: BoxFit.fitWidth),
+        ),
         body: FutureBuilder(
-            future: fetchAllProduct(),
+            future: widget.category == ''
+                ? fetchAllProduct()
+                : fetchProductByCategory(widget.category),
             builder: (context, model) {
               if (model.hasData) {
                 var list = model.data!.data!;
@@ -94,7 +114,7 @@ class _ShopPageState extends State<ShopPage> {
                           ]
                         };
                         var model = await addToCart(body);
-                        if (!model.errors.isNull) {
+                        if (model.errors != null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Added to Cart')));
                         } else {
@@ -108,6 +128,12 @@ class _ShopPageState extends State<ShopPage> {
                                 title: const Text(
                                     "Silahkan login untuk memasukkan produk ke keranjang anda"),
                                 actions: [
+                                  TextButton(
+                                    child: const Text("Login"),
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/account');
+                                    },
+                                  ),
                                   TextButton(
                                     child: const Text("Close"),
                                     onPressed: () {
@@ -144,15 +170,16 @@ class _ShopPageState extends State<ShopPage> {
         Visibility(
           visible: product.priceSale == 0,
           child: Text(
-            'Rp ${product.priceOriginal}',
+            '${CurrencyFormat.convertToIdr(product.priceOriginal, 0)}',
             style: CusTextStyle.itemText,
           ),
           replacement: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Rp ${product.priceSale}', style: CusTextStyle.itemText),
+              Text('${CurrencyFormat.convertToIdr(product.priceSale, 0)}',
+                  style: CusTextStyle.itemText),
               const HorizontalSeparator(width: 1),
-              Text('Rp ${product.priceOriginal}',
+              Text('${CurrencyFormat.convertToIdr(product.priceOriginal, 0)}',
                   style: CusTextStyle.itemText.copyWith(
                       color: CusColor.disable,
                       fontSize: 12,
@@ -231,7 +258,44 @@ class _ShopPageState extends State<ShopPage> {
                                 .copyWith(color: const Color(0xff8A8FB9)),
                           )
                         ],
-                      )
+                      ),
+                      HorizontalSeparator(width: 3),
+                      FutureBuilder<CategoryModel>(
+                          future: fetchAllCategory(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<String> item = snapshot
+                                  .data!.data!.categories
+                                  .map((e) => e.category)
+                                  .toList();
+                              return DropdownButton(
+                                hint: Text('Select Category'),
+                                value: widget.category == ''
+                                    ? null
+                                    : widget.category,
+                                items: item
+                                    .map((e) => DropdownMenuItem(
+                                          child: Text(e),
+                                          value: e,
+                                        ))
+                                    .toList(),
+                                onChanged: (dynamic val) async {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => ShopPage(
+                                                category: val,
+                                              )));
+                                },
+                              );
+                            } else if (snapshot.hasError)
+                              return Text(snapshot.error.toString());
+                            else
+                              return SizedBox(
+                                  width: 50,
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
+                          })
                     ],
                   ),
                 ),

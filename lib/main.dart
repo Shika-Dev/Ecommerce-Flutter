@@ -8,6 +8,7 @@ import 'package:ecom_web_flutter/pages/account_page.dart';
 import 'package:ecom_web_flutter/pages/calculator_page.dart';
 import 'package:ecom_web_flutter/pages/cart_page.dart';
 import 'package:ecom_web_flutter/pages/shop_page.dart';
+import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/currency_format.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/auth.dart';
@@ -18,12 +19,15 @@ import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'api_repository/models/models.dart';
 
 void main() async {
   await setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -40,7 +44,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/account': (context) => const AccountPage(),
         '/calc': (context) => const Calculator(),
-        '/shop': (context) => const ShopPage(),
+        '/shop': (context) => const ShopPage(
+              category: '',
+            ),
         '/cart': (context) => const CartPage()
       },
       theme: ThemeData(fontFamily: 'JosefinSans'),
@@ -139,6 +145,22 @@ class _HomePageState extends State<HomePage> {
             }
             return SizedBox();
           }),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          var whatsappUrl = "whatsapp://send?phone=+6281918887333";
+          try {
+            launch(whatsappUrl);
+          } catch (e) {
+            //To handle error and display error message
+            print('unable to open WhatsApp');
+          }
+        },
+        child: Image.asset(Assets.icons.waIcon.path,
+            isAntiAlias: true,
+            filterQuality: FilterQuality.medium,
+            width: 62,
+            fit: BoxFit.fitWidth),
+      ),
     );
   }
 
@@ -211,6 +233,7 @@ class _HomePageState extends State<HomePage> {
                                 CurrencyFormat.convertToIdr(
                                     list[0].priceOriginal, 0),
                                 null,
+                                list[0].id,
                                 url: list[0].imageUrl),
                             child: item(
                                 list[0].name,
@@ -218,6 +241,7 @@ class _HomePageState extends State<HomePage> {
                                     list[0].priceSale, 0),
                                 CurrencyFormat.convertToIdr(
                                     list[0].priceOriginal, 0),
+                                list[0].id,
                                 url: list[0].imageUrl),
                           ),
                           Visibility(
@@ -227,6 +251,7 @@ class _HomePageState extends State<HomePage> {
                                 CurrencyFormat.convertToIdr(
                                     list[1].priceOriginal, 0),
                                 null,
+                                list[1].id,
                                 url: list[1].imageUrl),
                             child: item(
                                 list[1].name,
@@ -234,6 +259,7 @@ class _HomePageState extends State<HomePage> {
                                     list[1].priceSale, 0),
                                 CurrencyFormat.convertToIdr(
                                     list[1].priceOriginal, 0),
+                                list[1].id,
                                 url: list[1].imageUrl),
                           ),
                           Visibility(
@@ -243,6 +269,7 @@ class _HomePageState extends State<HomePage> {
                                 CurrencyFormat.convertToIdr(
                                     list[2].priceOriginal, 0),
                                 null,
+                                list[2].id,
                                 url: list[2].imageUrl),
                             child: item(
                                 list[2].name,
@@ -250,6 +277,7 @@ class _HomePageState extends State<HomePage> {
                                     list[2].priceSale, 0),
                                 CurrencyFormat.convertToIdr(
                                     list[2].priceOriginal, 0),
+                                list[2].id,
                                 url: list[2].imageUrl),
                           ),
                           Visibility(
@@ -259,6 +287,7 @@ class _HomePageState extends State<HomePage> {
                                 CurrencyFormat.convertToIdr(
                                     list[3].priceOriginal, 0),
                                 null,
+                                list[3].id,
                                 url: list[3].imageUrl),
                             child: item(
                                 list[3].name,
@@ -266,6 +295,7 @@ class _HomePageState extends State<HomePage> {
                                     list[3].priceSale, 0),
                                 CurrencyFormat.convertToIdr(
                                     list[3].priceOriginal, 0),
+                                list[3].id,
                                 url: list[3].imageUrl),
                           ),
                         ],
@@ -279,12 +309,14 @@ class _HomePageState extends State<HomePage> {
                                   CurrencyFormat.convertToIdr(
                                       e.priceOriginal, 0),
                                   null,
+                                  e.id,
                                   url: e.imageUrl)
                               : item(
                                   e.name,
                                   CurrencyFormat.convertToIdr(e.priceSale, 0),
                                   CurrencyFormat.convertToIdr(
                                       e.priceOriginal, 0),
+                                  e.id,
                                   url: e.imageUrl))
                         ],
                       ),
@@ -489,13 +521,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pengiriman Termasuk',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -516,13 +548,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Negosiasi Harga',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -543,13 +575,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Jaminan Kerusakan',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Kami menjamin setiap barang kami berfungsi dengan baik, dan kami ganti jika rusak sebelum acara anda mulai',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -570,13 +602,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pembayaran Mudah',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Konfirmasi pembayaran tidak diperlukan karena sistem pembayaran terintegrasi otomatis dengan kami',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -824,12 +856,14 @@ class _HomePageState extends State<HomePage> {
                       list[index].name,
                       CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
                       null,
+                      list[index].id,
                       url: list[index].imageUrl,
                       width: SizeConfig.safeBlockHorizontal * 25),
                   child: item(
                       list[index].name,
                       CurrencyFormat.convertToIdr(list[index].priceSale, 0),
                       CurrencyFormat.convertToIdr(list[index].priceOriginal, 0),
+                      list[index].id,
                       url: list[index].imageUrl,
                       width: SizeConfig.safeBlockHorizontal * 25),
                 ),
@@ -1022,13 +1056,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pengiriman Termasuk',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -1049,13 +1083,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Negosiasi Harga',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -1082,13 +1116,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Jaminan Kerusakan',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Kami menjamin setiap barang kami berfungsi dengan baik, dan kami ganti jika rusak sebelum acara anda mulai',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -1109,13 +1143,13 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pembayaran Mudah',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Konfirmasi pembayaran tidak diperlukan karena sistem pembayaran terintegrasi otomatis dengan kami',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               color: CusColor.disable,
@@ -1343,7 +1377,7 @@ class _HomePageState extends State<HomePage> {
         code: list[i].id.toString(),
         title: list[i].name,
         price: CurrencyFormat.convertToIdr(list[i].priceOriginal, 0),
-        width: SizeConfig.safeBlockHorizontal * 80,
+        width: SizeConfig.safeBlockHorizontal * 70,
       ));
     }
     return Column(
@@ -1374,15 +1408,17 @@ class _HomePageState extends State<HomePage> {
                             CurrencyFormat.convertToIdr(
                                 list[0].priceOriginal, 0),
                             null,
+                            list[0].id,
                             url: list[0].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                         child: item(
                             list[0].name,
                             CurrencyFormat.convertToIdr(list[0].priceSale, 0),
                             CurrencyFormat.convertToIdr(
                                 list[0].priceOriginal, 0),
+                            list[0].id,
                             url: list[0].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                       ),
                     )
                   : SizedBox(),
@@ -1397,15 +1433,17 @@ class _HomePageState extends State<HomePage> {
                             CurrencyFormat.convertToIdr(
                                 list[1].priceOriginal, 0),
                             null,
+                            list[1].id,
                             url: list[1].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                         child: item(
                             list[1].name,
                             CurrencyFormat.convertToIdr(list[1].priceSale, 0),
                             CurrencyFormat.convertToIdr(
                                 list[1].priceOriginal, 0),
+                            list[1].id,
                             url: list[1].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                       ),
                     )
                   : SizedBox(),
@@ -1420,15 +1458,17 @@ class _HomePageState extends State<HomePage> {
                             CurrencyFormat.convertToIdr(
                                 list[2].priceOriginal, 0),
                             null,
+                            list[2].id,
                             url: list[2].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                         child: item(
                             list[2].name,
                             CurrencyFormat.convertToIdr(list[2].priceSale, 0),
                             CurrencyFormat.convertToIdr(
                                 list[2].priceOriginal, 0),
+                            list[2].id,
                             url: list[2].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                       ),
                     )
                   : SizedBox(),
@@ -1443,15 +1483,17 @@ class _HomePageState extends State<HomePage> {
                             CurrencyFormat.convertToIdr(
                                 list[3].priceOriginal, 0),
                             null,
+                            list[3].id,
                             url: list[3].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                         child: item(
                             list[3].name,
                             CurrencyFormat.convertToIdr(list[3].priceSale, 0),
                             CurrencyFormat.convertToIdr(
                                 list[3].priceOriginal, 0),
+                            list[3].id,
                             url: list[3].imageUrl,
-                            width: SizeConfig.safeBlockHorizontal * 80),
+                            width: SizeConfig.safeBlockHorizontal * 70),
                       ),
                     )
                   : SizedBox(),
@@ -1642,16 +1684,15 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pengiriman Termasuk',
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 12,
                               color: CusColor.disable,
                               fontWeight: FontWeight.w700),
                         ),
@@ -1670,16 +1711,15 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Negosiasi Harga',
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 12,
                               color: CusColor.disable,
                               fontWeight: FontWeight.w700),
                         ),
@@ -1704,16 +1744,15 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         HorizontalSeparator(width: 2),
                         Text(
-                          '24/7 Support',
+                          'Jaminan Kerusakan',
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Kami menjamin setiap barang kami berfungsi dengan baik, dan kami ganti jika rusak sebelum acara anda mulai',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 12,
                               color: CusColor.disable,
                               fontWeight: FontWeight.w700),
                         ),
@@ -1733,16 +1772,15 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          '24/7 Support',
+                          'Pembayaran Mudah',
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa purus gravida.',
+                          'Konfirmasi pembayaran tidak diperlukan karena sistem pembayaran terintegrasi otomatis dengan kami',
                           textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
-                              fontSize: 12,
                               color: CusColor.disable,
                               fontWeight: FontWeight.w700),
                         ),
@@ -1761,7 +1799,8 @@ class _HomePageState extends State<HomePage> {
               ),
               VerticalSeparator(height: 10),
               SizedBox(
-                height: SizeConfig.safeBlockVertical * 40,
+                height: SizeConfig.safeBlockHorizontal * 70 +
+                    SizeConfig.safeBlockVertical * 10,
                 child: PageView(
                   pageSnapping: false,
                   controller: _pageController,
@@ -1868,45 +1907,89 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget item(String title, String price, String? oldPrice,
+  Widget item(String title, String price, String? oldPrice, int id,
       {double? width, required String url}) {
-    return Container(
-      padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 33),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [CusBoxShadow.shadow],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: width ?? SizeConfig.safeBlockHorizontal * 15,
-            height: width ?? SizeConfig.safeBlockHorizontal * 15,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(url), fit: BoxFit.cover)),
-          ),
-          VerticalSeparator(height: 1),
-          Text(title,
-              style:
-                  CusTextStyle.itemText.copyWith(fontWeight: FontWeight.w700)),
-          VerticalSeparator(height: 1),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(price, style: CusTextStyle.itemText.copyWith(fontSize: 14)),
-              oldPrice != null ? HorizontalSeparator(width: 1) : SizedBox(),
-              oldPrice != null
-                  ? Text(oldPrice,
-                      style: CusTextStyle.itemText.copyWith(
-                          color: CusColor.disable,
-                          fontSize: 12,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: CusColor.disable))
-                  : SizedBox(),
-            ],
-          ),
-        ],
+    return GestureDetector(
+      onTap: () async {
+        SharedPreferencesManager pref = locator<SharedPreferencesManager>();
+        bool isLogin = pref.getBool(SharedPreferencesManager.keyAuth) ?? false;
+        if (isLogin) {
+          Map<String, dynamic> body = {
+            'cartData': [
+              {'productId': id, 'qty': 1, 'additionalNote': ''}
+            ]
+          };
+          var model = await addToCart(body);
+          if (model.errors != null) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Added to Cart')));
+          } else {
+            print(model.errors.toString());
+          }
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text(
+                      "Silahkan login untuk memasukkan produk ke keranjang anda"),
+                  actions: [
+                    TextButton(
+                      child: const Text("Login"),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/account');
+                      },
+                    ),
+                    TextButton(
+                      child: const Text("Close"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              });
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 33),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [CusBoxShadow.shadow],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: width ?? SizeConfig.safeBlockHorizontal * 15,
+              height: width ?? SizeConfig.safeBlockHorizontal * 15,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(url), fit: BoxFit.cover)),
+            ),
+            VerticalSeparator(height: 1),
+            Text(title,
+                style: CusTextStyle.itemText
+                    .copyWith(fontWeight: FontWeight.w700)),
+            VerticalSeparator(height: 1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(price,
+                    style: CusTextStyle.itemText.copyWith(fontSize: 14)),
+                oldPrice != null ? HorizontalSeparator(width: 1) : SizedBox(),
+                oldPrice != null
+                    ? Text(oldPrice,
+                        style: CusTextStyle.itemText.copyWith(
+                            color: CusColor.disable,
+                            fontSize: 12,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: CusColor.disable))
+                    : SizedBox(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1971,7 +2054,7 @@ class _OnHoverProductState extends State<OnHoverProduct> {
           children: [
             Container(
               width: widget.width ?? SizeConfig.safeBlockHorizontal * 15,
-              height: SizeConfig.safeBlockVertical * 25,
+              height: widget.width ?? SizeConfig.safeBlockHorizontal * 15,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(widget.imageUrl), fit: BoxFit.cover)),
@@ -2018,46 +2101,46 @@ class _OnHoverProductState extends State<OnHoverProduct> {
                 style: CusTextStyle.itemText.copyWith(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
-                    color: onHover ? Colors.white : CusColor.green,
+                    color: onHover ? Colors.white : CusColor.black,
                     fontSize: 18)),
-            VerticalSeparator(height: 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 4,
-                  width: 14,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: CusColor.green,
-                  ),
-                ),
-                SizedBox(width: 5),
-                Container(
-                  height: 4,
-                  width: 14,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: CusColor.red,
-                  ),
-                ),
-                SizedBox(width: 5),
-                Container(
-                  height: 4,
-                  width: 14,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: onHover ? Color(0xffFFEAC1) : CusColor.blue,
-                  ),
-                ),
-              ],
-            ),
-            VerticalSeparator(height: 2),
-            Text('Code - ${widget.code}',
-                style: CusTextStyle.itemText.copyWith(
-                  fontSize: 14,
-                  color: onHover ? Colors.white : CusColor.blue,
-                )),
+            // VerticalSeparator(height: 2),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Container(
+            //       height: 4,
+            //       width: 14,
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: CusColor.green,
+            //       ),
+            //     ),
+            //     SizedBox(width: 5),
+            //     Container(
+            //       height: 4,
+            //       width: 14,
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: CusColor.red,
+            //       ),
+            //     ),
+            //     SizedBox(width: 5),
+            //     Container(
+            //       height: 4,
+            //       width: 14,
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: onHover ? Color(0xffFFEAC1) : CusColor.blue,
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // VerticalSeparator(height: 2),
+            // Text('Code - ${widget.code}',
+            //     style: CusTextStyle.itemText.copyWith(
+            //       fontSize: 14,
+            //       color: onHover ? Colors.white : CusColor.blue,
+            //     )),
             VerticalSeparator(height: 1),
             Text(widget.price,
                 style: CusTextStyle.itemText.copyWith(

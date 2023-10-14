@@ -4,19 +4,19 @@ class CusTextStyle {
   static TextStyle bodyText = TextStyle(
       fontFamily: 'JosefinSans',
       fontSize: 16,
-      color: CusColor.darkBlue,
+      color: CusColor.black,
       fontWeight: FontWeight.w400);
 
   static TextStyle itemText = TextStyle(
       fontFamily: 'JosefinSans',
       fontSize: 16,
-      color: CusColor.blue,
+      color: CusColor.black,
       fontWeight: FontWeight.w400);
 
   static TextStyle navText = TextStyle(
       fontFamily: 'Lato',
       fontSize: 16,
-      color: CusColor.darkBlue,
+      color: CusColor.black,
       fontWeight: FontWeight.w400);
 }
 

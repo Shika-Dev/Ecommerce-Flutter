@@ -9,6 +9,7 @@ import 'package:ecom_web_flutter/widget/contact.dart';
 import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -38,6 +39,22 @@ class _AccountPageState extends State<AccountPage> {
         backgroundColor: Colors.white,
         drawer: NavDrawer(
           index: 5,
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            var whatsappUrl = "whatsapp://send?phone=+6281918887333";
+            try {
+              launch(whatsappUrl);
+            } catch (e) {
+              //To handle error and display error message
+              print('unable to open WhatsApp');
+            }
+          },
+          child: Image.asset(Assets.icons.waIcon.path,
+              isAntiAlias: true,
+              filterQuality: FilterQuality.medium,
+              width: 62,
+              fit: BoxFit.fitWidth),
         ),
         body: LayoutBuilder(
           builder: (context, constraint) {

@@ -24,7 +24,7 @@ Future<CategoryModel> fetchAllCategory() async {
 
 Future<ProductModel> fetchProductByCategory(String category) async {
   ProductModel model = await apiRequest<ProductModel, void>(
-      '/product/getbycategory/$category',
+      '/product/getbycategory/$category?limit=500&offset=0',
       method: HttpMethod.GET);
   return model;
 }

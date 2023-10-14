@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js' as js;
-import 'dart:js_interop';
 
 import 'package:ecom_web_flutter/api_repository/data_sources/order_datasources.dart';
 import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.dart';
 import 'package:ecom_web_flutter/api_repository/models/models.dart';
+import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/currency_format.dart';
@@ -21,6 +21,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -322,6 +323,22 @@ class _CartPageState extends State<CartPage> {
         drawer: NavDrawer(
           index: 2,
         ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            var whatsappUrl = "whatsapp://send?phone=+6281918887333";
+            try {
+              launch(whatsappUrl);
+            } catch (e) {
+              //To handle error and display error message
+              print('unable to open WhatsApp');
+            }
+          },
+          child: Image.asset(Assets.icons.waIcon.path,
+              isAntiAlias: true,
+              filterQuality: FilterQuality.medium,
+              width: 62,
+              fit: BoxFit.fitWidth),
+        ),
         body: FutureBuilder(
             future: fetchUserCart(),
             builder: (context, snapshot) {
@@ -372,7 +389,7 @@ class _CartPageState extends State<CartPage> {
                       'productId': cartItem.productId
                     };
                     var model = await deleteFromCart(body);
-                    if (!model.errors.isNull) {
+                    if (model.errors != null) {
                       Navigator.pushReplacementNamed(context, '/cart');
                     } else {
                       print(model.errors.toString());
@@ -434,7 +451,7 @@ class _CartPageState extends State<CartPage> {
                           ]
                         };
                         var model = await addToCart(body);
-                        if (!model.errors.isNull) {
+                        if (model.errors != null) {
                           Navigator.pushReplacementNamed(context, '/cart');
                         } else {
                           print(model.errors.toString());
@@ -492,7 +509,7 @@ class _CartPageState extends State<CartPage> {
                       ]
                     };
                     var model = await addToCart(body);
-                    if (!model.errors.isNull) {
+                    if (model.errors != null) {
                       Navigator.pushReplacementNamed(context, '/cart');
                     } else {
                       print(model.errors.toString());
@@ -757,8 +774,8 @@ class _CartPageState extends State<CartPage> {
                                       };
                                       PostResponseModel response =
                                           await addOrder(body);
-                                      if (response.errors.isNull ||
-                                          response.errors!.errorCode.isNull) {
+                                      if (response.errors == null ||
+                                          response.errors!.errorCode == null) {
                                         _createPDF(
                                             list,
                                             nameController.text,
@@ -1032,8 +1049,8 @@ class _CartPageState extends State<CartPage> {
                                 };
                                 PostResponseModel response =
                                     await addOrder(body);
-                                if (response.errors.isNull ||
-                                    response.errors!.errorCode.isNull) {
+                                if (response.errors == null ||
+                                    response.errors!.errorCode == null) {
                                   _createPDF(
                                       list,
                                       nameController.text,

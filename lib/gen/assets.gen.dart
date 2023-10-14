@@ -65,6 +65,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/unknown.svg
   String get unknown => 'assets/icons/unknown.svg';
 
+  /// File path: assets/icons/wa_icon.png
+  AssetGenImage get waIcon => const AssetGenImage('assets/icons/wa_icon.png');
+
   /// List of all assets
   List<dynamic> get values => [
         documents,
@@ -83,7 +86,8 @@ class $AssetsIconsGen {
         menuTran,
         sevvaLogo,
         sevvaLogoJpg,
-        unknown
+        unknown,
+        waIcon
       ];
 }
 
