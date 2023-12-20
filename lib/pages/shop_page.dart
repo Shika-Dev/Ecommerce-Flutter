@@ -15,7 +15,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ShopPage extends StatefulWidget {
   final String category;
-  const ShopPage({Key? key, required this.category}) : super(key: key);
+  final String? keyword;
+  const ShopPage({Key? key, required this.category, this.keyword})
+      : super(key: key);
 
   @override
   State<ShopPage> createState() => _ShopPageState();
@@ -61,7 +63,7 @@ class _ShopPageState extends State<ShopPage> {
         ),
         body: FutureBuilder(
             future: widget.category == ''
-                ? fetchAllProduct()
+                ? fetchAllProduct(widget.keyword != null, widget.keyword)
                 : fetchProductByCategory(widget.category),
             builder: (context, model) {
               if (model.hasData) {
@@ -164,6 +166,7 @@ class _ShopPageState extends State<ShopPage> {
         ),
         const VerticalSeparator(height: 2),
         Text(product.name,
+            textAlign: TextAlign.center,
             style: CusTextStyle.itemText
                 .copyWith(fontWeight: FontWeight.w700, fontSize: 18)),
         const VerticalSeparator(height: 1),

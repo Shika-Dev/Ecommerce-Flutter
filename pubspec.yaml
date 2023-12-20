@@ -42,7 +42,7 @@ dependencies:
   provider: ^6.0.5
   json_annotation: ^4.8.1
   equatable: ^2.0.5
-  flutter_svg: ^0.22.0
+  flutter_svg: ^2.0.9
 
   fl_chart: ^0.36.1
   google_fonts: ^2.1.0
@@ -50,17 +50,18 @@ dependencies:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons.git
       branch: null-safety-migration
-  intl: ^0.17.0
+  intl: ^0.18.0
   table_calendar: ^3.0.0
   flutter_screenutil: ^5.0.0+2
   smooth_page_indicator: ^0.3.0-nullsafety.0
   colorize_text_avatar: ^1.0.2
   firebase_core: ^2.15.0
-  syncfusion_flutter_pdf: ^21.2.4
-  syncfusion_flutter_datepicker: ^21.2.3
+  syncfusion_flutter_pdf: ^23.1.41
+  syncfusion_flutter_datepicker: ^23.1.41
   flutter_dotenv: ^5.1.0
   url_strategy: ^0.2.0
   url_launcher: ^6.1.14
+  flutter_native_splash: ^2.3.5
 
 dev_dependencies:
   json_serializable: ^6.7.1

@@ -1,9 +1,11 @@
 import 'package:ecom_web_flutter/api_repository/api_request.dart';
 import 'package:ecom_web_flutter/api_repository/models/models.dart';
 
-Future<ProductModel> fetchAllProduct() async {
+Future<ProductModel> fetchAllProduct(bool isSearch, String? keyword) async {
   ProductModel model = await apiRequest<ProductModel, void>(
-      '/product?limit=500&offset=0',
+      isSearch
+          ? '/product/search?query=$keyword'
+          : '/product?limit=500&offset=0',
       method: HttpMethod.GET);
   return model;
 }

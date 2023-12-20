@@ -1,5 +1,6 @@
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
+import 'package:ecom_web_flutter/pages/shop_page.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
@@ -18,6 +19,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   SharedPreferencesManager pref = locator<SharedPreferencesManager>();
+  TextEditingController controller = TextEditingController();
   bool _showSearch = false;
   @override
   Widget build(BuildContext context) {
@@ -86,6 +88,16 @@ class _NavBarState extends State<NavBar> {
                     _showSearch = false;
                   }),
                   style: CusTextStyle.bodyText,
+                  controller: controller,
+                  onEditingComplete: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => ShopPage(
+                                  category: '',
+                                  keyword: controller.text,
+                                )));
+                  },
                   decoration: InputDecoration(
                       hintText: 'Mau sewa apa?',
                       hintStyle: CusTextStyle.bodyText
@@ -197,6 +209,15 @@ class _NavBarState extends State<NavBar> {
                         onTapOutside: (event) => setState(() {
                           _showSearch = false;
                         }),
+                        onEditingComplete: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ShopPage(
+                                        category: '',
+                                        keyword: controller.text,
+                                      )));
+                        },
                         style: CusTextStyle.bodyText,
                         decoration: InputDecoration(
                             hintText: 'Mau sewa apa?',
@@ -299,6 +320,15 @@ class _NavBarState extends State<NavBar> {
                         onTapOutside: (event) => setState(() {
                           _showSearch = false;
                         }),
+                        onEditingComplete: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ShopPage(
+                                        category: '',
+                                        keyword: controller.text,
+                                      )));
+                        },
                         style: CusTextStyle.bodyText,
                         decoration: InputDecoration(
                             hintText: 'Mau sewa apa?',

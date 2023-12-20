@@ -21,7 +21,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -327,7 +327,7 @@ class _CartPageState extends State<CartPage> {
           onTap: () {
             var whatsappUrl = "whatsapp://send?phone=+6281918887333";
             try {
-              launch(whatsappUrl);
+              launchUrlString(whatsappUrl);
             } catch (e) {
               //To handle error and display error message
               print('unable to open WhatsApp');
@@ -878,37 +878,31 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 VerticalSeparator(height: 4),
+                ...list.map((e) => Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.safeBlockHorizontal * 10),
+                      child: item(e, listQtyController[list.indexOf(e)],
+                          listNoteController[list.indexOf(e)], totalPrice),
+                    )),
+                VerticalSeparator(height: 2),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.safeBlockHorizontal * 10),
-                  child: Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...list.map((e) => item(
-                          e,
-                          listQtyController[list.indexOf(e)],
-                          listNoteController[list.indexOf(e)],
-                          totalPrice)),
-                      SizedBox(
-                        height: 40,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: Color(0xff19D16F)),
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/shop');
-                            },
-                            child: Text(
-                              'Kembali Belanja',
-                              style: CusTextStyle.bodyText.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white),
-                            )),
-                      )
-                    ],
-                  )),
-                ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.safeBlockHorizontal * 10),
+                    child: SizedBox(
+                      height: 40,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              elevation: 0, backgroundColor: Color(0xff19D16F)),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/shop');
+                          },
+                          child: Text(
+                            'Kembali Belanja',
+                            style: CusTextStyle.bodyText.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
+                          )),
+                    )),
                 VerticalSeparator(height: 5),
                 Container(
                   padding: EdgeInsets.symmetric(

@@ -5,7 +5,6 @@ import 'package:ecom_web_flutter/firebase_options.dart';
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/pages/account_page.dart';
-import 'package:ecom_web_flutter/pages/calculator_page.dart';
 import 'package:ecom_web_flutter/pages/cart_page.dart';
 import 'package:ecom_web_flutter/pages/shop_page.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
@@ -43,7 +42,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/account': (context) => const AccountPage(),
-        '/calc': (context) => const Calculator(),
         '/shop': (context) => const ShopPage(
               category: '',
             ),
@@ -521,7 +519,7 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Pengiriman Termasuk',
+                          'Pengiriman',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -549,6 +547,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Negosiasi Harga',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -576,6 +575,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Jaminan Kerusakan',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -603,6 +603,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Pembayaran Mudah',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1056,7 +1057,7 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Pengiriman Termasuk',
+                          'Pengiriman',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1084,6 +1085,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Negosiasi Harga',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1117,6 +1119,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Jaminan Kerusakan',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1144,6 +1147,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Pembayaran Mudah',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1684,7 +1688,7 @@ class _HomePageState extends State<HomePage> {
                             fit: BoxFit.fitWidth),
                         VerticalSeparator(height: 2),
                         Text(
-                          'Pengiriman Termasuk',
+                          'Pengiriman',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1712,6 +1716,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Negosiasi Harga',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1745,6 +1750,7 @@ class _HomePageState extends State<HomePage> {
                         HorizontalSeparator(width: 2),
                         Text(
                           'Jaminan Kerusakan',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -1773,6 +1779,7 @@ class _HomePageState extends State<HomePage> {
                         VerticalSeparator(height: 2),
                         Text(
                           'Pembayaran Mudah',
+                          textAlign: TextAlign.center,
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
@@ -2097,12 +2104,16 @@ class _OnHoverProductState extends State<OnHoverProduct> {
               ),
             ),
             VerticalSeparator(height: 1),
-            Text(widget.title,
-                style: CusTextStyle.itemText.copyWith(
-                    fontFamily: 'Lato',
-                    fontWeight: FontWeight.w700,
-                    color: onHover ? Colors.white : CusColor.black,
-                    fontSize: 18)),
+            SizedBox(
+              width: widget.width ?? SizeConfig.safeBlockHorizontal * 15,
+              child: Text(widget.title,
+                  textAlign: TextAlign.center,
+                  style: CusTextStyle.itemText.copyWith(
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.w700,
+                      color: onHover ? Colors.white : CusColor.black,
+                      fontSize: 18)),
+            ),
             // VerticalSeparator(height: 2),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
