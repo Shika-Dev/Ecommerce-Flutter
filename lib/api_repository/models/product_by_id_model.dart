@@ -2,25 +2,25 @@ import 'package:ecom_web_flutter/api_repository/models/error_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'product_model.g.dart';
+part 'product_by_id_model.g.dart';
 
 @JsonSerializable()
-class ProductModel extends Equatable {
-  const ProductModel({this.errors, this.data});
+class ProductByIdModel extends Equatable {
+  const ProductByIdModel({this.errors, this.data});
 
   final ErrorData? errors;
-  final List<ProductData>? data;
+  final ProductDataById? data;
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductModelFromJson(json);
+  factory ProductByIdModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductByIdModelFromJson(json);
 
   @override
   List<Object?> get props => [data, errors];
 }
 
 @JsonSerializable()
-class ProductData extends Equatable {
-  const ProductData(
+class ProductDataById extends Equatable {
+  const ProductDataById(
       {required this.id,
       required this.name,
       this.description,
@@ -43,8 +43,8 @@ class ProductData extends Equatable {
   final bool isDeleted;
   final String? unit;
 
-  factory ProductData.fromJson(Map<String, dynamic> json) =>
-      _$ProductDataFromJson(json);
+  factory ProductDataById.fromJson(Map<String, dynamic> json) =>
+      _$ProductDataByIdFromJson(json);
 
   @override
   List<Object?> get props => [

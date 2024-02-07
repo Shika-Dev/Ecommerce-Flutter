@@ -1,11 +1,11 @@
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
-import 'package:ecom_web_flutter/pages/shop_page.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
 import 'package:ecom_web_flutter/utils/size.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class NavBar extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -34,338 +34,351 @@ class _NavBarState extends State<NavBar> {
   }
 
   Widget largeWidget() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            Assets.icons.sevvaLogoJpg.path,
-            fit: BoxFit.fitWidth,
-            width: 150,
-          ),
-          HorizontalSeparator(width: 8),
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/'),
-            child: Text('Home',
-                style: widget.index == 0
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
-          ),
-          HorizontalSeparator(width: 2),
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/shop'),
-            child: Text('Shop',
-                style: widget.index == 1
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
-          ),
-          HorizontalSeparator(width: 2),
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/cart'),
-            child: Text('Cart',
-                style: widget.index == 2
-                    ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                    : CusTextStyle.navText),
-          ),
-          Spacer(),
-          Visibility(
-            visible: _showSearch,
-            replacement: GestureDetector(
-                onTap: () => setState(() {
-                      _showSearch = true;
-                    }),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
+          color: Colors.white,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                Assets.icons.sevvaLogoJpg.path,
+                fit: BoxFit.fitWidth,
+                width: 150,
+              ),
+              HorizontalSeparator(width: 8),
+              GestureDetector(
+                onTap: () => context.go('/'),
+                child: Text('Home',
+                    style: widget.index == 0
+                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                        : CusTextStyle.navText),
+              ),
+              HorizontalSeparator(width: 2),
+              GestureDetector(
+                onTap: () => context.go('/shop'),
+                child: Text('Shop',
+                    style: widget.index == 1
+                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                        : CusTextStyle.navText),
+              ),
+              HorizontalSeparator(width: 2),
+              GestureDetector(
+                onTap: () => context.go('/cart'),
+                child: Text('Cart',
+                    style: widget.index == 2
+                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                        : CusTextStyle.navText),
+              ),
+              Spacer(),
+              Visibility(
+                visible: _showSearch,
+                replacement: GestureDetector(
+                    onTap: () => setState(() {
+                          _showSearch = true;
+                        }),
+                    child: SizedBox(
+                        height: 40,
+                        child:
+                            Icon(Icons.search_rounded, color: CusColor.green))),
                 child: SizedBox(
+                    width: SizeConfig.safeBlockHorizontal * 20,
                     height: 40,
-                    child: Icon(Icons.search_rounded, color: CusColor.green))),
-            child: SizedBox(
-                width: SizeConfig.safeBlockHorizontal * 20,
-                height: 40,
-                child: TextFormField(
-                  onTapOutside: (event) => setState(() {
-                    _showSearch = false;
-                  }),
-                  style: CusTextStyle.bodyText,
-                  controller: controller,
-                  onEditingComplete: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => ShopPage(
-                                  category: '',
-                                  keyword: controller.text,
-                                )));
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'Mau sewa apa?',
-                      hintStyle: CusTextStyle.bodyText
-                          .copyWith(color: CusColor.disable),
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                      filled: true,
-                      fillColor: Colors.white,
-                      suffixIcon: Container(
-                        color: CusColor.green,
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.search_rounded,
-                          color: Colors.white,
+                    child: TextFormField(
+                      onTapOutside: (event) => setState(() {
+                        _showSearch = false;
+                      }),
+                      style: CusTextStyle.bodyText,
+                      controller: controller,
+                      onEditingComplete: () {
+                        context
+                            .go('/shop?category=&keyword=${controller.text}');
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Mau sewa apa?',
+                          hintStyle: CusTextStyle.bodyText
+                              .copyWith(color: CusColor.disable),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          filled: true,
+                          fillColor: Colors.white,
+                          suffixIcon: Container(
+                            color: CusColor.green,
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.search_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.zero,
+                              borderSide:
+                                  BorderSide(color: CusColor.border, width: 2)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.zero,
+                              borderSide: BorderSide(
+                                  color: CusColor.border, width: 2))),
+                    )),
+              ),
+              HorizontalSeparator(width: 2),
+              GestureDetector(
+                onTap: () => context.go('/account'),
+                child: Container(
+                  clipBehavior: Clip.hardEdge,
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: CusColor.border, shape: BoxShape.circle),
+                  child: pref.getBool(SharedPreferencesManager.keyAuth) ?? false
+                      ? Image.network(
+                          pref.getString(
+                                  SharedPreferencesManager.keyProfileImage) ??
+                              '',
+                          fit: BoxFit.fitWidth)
+                      : Center(
+                          child: Icon(
+                            Icons.person_rounded,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.zero,
-                          borderSide:
-                              BorderSide(color: CusColor.border, width: 2)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.zero,
-                          borderSide:
-                              BorderSide(color: CusColor.border, width: 2))),
-                )),
+                ),
+              )
+            ],
           ),
-          HorizontalSeparator(width: 2),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed('/account'),
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              width: 40,
-              height: 40,
-              decoration:
-                  BoxDecoration(color: CusColor.border, shape: BoxShape.circle),
-              child: pref.getBool(SharedPreferencesManager.keyAuth) ?? false
-                  ? Image.network(
-                      pref.getString(
-                              SharedPreferencesManager.keyProfileImage) ??
-                          '',
-                      fit: BoxFit.fitWidth)
-                  : Center(
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-            ),
-          )
-        ],
-      ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10),
+          child: Divider(color: Color(0xffbebbbb)),
+        ),
+      ],
     );
   }
 
   Widget mediumWidget() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            Assets.icons.sevvaLogoJpg.path,
-            fit: BoxFit.fitWidth,
-            width: 150,
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
+          color: Colors.white,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                Assets.icons.sevvaLogoJpg.path,
+                fit: BoxFit.fitWidth,
+                width: 150,
+              ),
+              HorizontalSeparator(width: 8),
+              Visibility(
+                visible: !_showSearch,
+                child: GestureDetector(
+                  onTap: () => context.go('/'),
+                  child: Text('Home',
+                      style: widget.index == 0
+                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                          : CusTextStyle.navText),
+                ),
+              ),
+              Visibility(
+                  visible: !_showSearch, child: HorizontalSeparator(width: 2)),
+              Visibility(
+                visible: !_showSearch,
+                child: GestureDetector(
+                  onTap: () => context.go('/shop'),
+                  child: Text('Shop',
+                      style: widget.index == 1
+                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                          : CusTextStyle.navText),
+                ),
+              ),
+              Visibility(
+                  visible: !_showSearch, child: HorizontalSeparator(width: 2)),
+              Visibility(
+                visible: !_showSearch,
+                child: GestureDetector(
+                  onTap: () => context.go('/cart'),
+                  child: Text('Cart',
+                      style: widget.index == 2
+                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
+                          : CusTextStyle.navText),
+                ),
+              ),
+              Spacer(),
+              _showSearch
+                  ? Expanded(
+                      child: SizedBox(
+                          height: 40,
+                          child: TextFormField(
+                            onTapOutside: (event) => setState(() {
+                              _showSearch = false;
+                            }),
+                            onEditingComplete: () {
+                              context.go(
+                                  '/shop?category=&keyword=${controller.text}');
+                            },
+                            style: CusTextStyle.bodyText,
+                            decoration: InputDecoration(
+                                hintText: 'Mau sewa apa?',
+                                hintStyle: CusTextStyle.bodyText
+                                    .copyWith(color: CusColor.disable),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 2),
+                                filled: true,
+                                fillColor: Colors.white,
+                                suffixIcon: Container(
+                                  color: CusColor.green,
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(
+                                    Icons.search_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide: BorderSide(
+                                        color: CusColor.border, width: 2)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide: BorderSide(
+                                        color: CusColor.border, width: 2))),
+                          )),
+                    )
+                  : GestureDetector(
+                      onTap: () => setState(() {
+                            _showSearch = true;
+                          }),
+                      child: SizedBox(
+                          height: 40,
+                          child: Icon(Icons.search_rounded,
+                              color: CusColor.green))),
+              HorizontalSeparator(width: 2),
+              GestureDetector(
+                onTap: () => context.go('/account'),
+                child: Container(
+                  clipBehavior: Clip.hardEdge,
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: CusColor.border, shape: BoxShape.circle),
+                  child: pref.getBool(SharedPreferencesManager.keyAuth) ?? false
+                      ? Image.network(
+                          pref.getString(
+                                  SharedPreferencesManager.keyProfileImage) ??
+                              '',
+                          fit: BoxFit.fitWidth)
+                      : Center(
+                          child: Icon(
+                            Icons.person_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+              )
+            ],
           ),
-          HorizontalSeparator(width: 8),
-          Visibility(
-            visible: !_showSearch,
-            child: GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/'),
-              child: Text('Home',
-                  style: widget.index == 0
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
-          ),
-          Visibility(
-              visible: !_showSearch, child: HorizontalSeparator(width: 2)),
-          Visibility(
-            visible: !_showSearch,
-            child: GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/shop'),
-              child: Text('Shop',
-                  style: widget.index == 1
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
-          ),
-          Visibility(
-              visible: !_showSearch, child: HorizontalSeparator(width: 2)),
-          Visibility(
-            visible: !_showSearch,
-            child: GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/cart'),
-              child: Text('Cart',
-                  style: widget.index == 2
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
-          ),
-          Spacer(),
-          _showSearch
-              ? Expanded(
-                  child: SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        onTapOutside: (event) => setState(() {
-                          _showSearch = false;
-                        }),
-                        onEditingComplete: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => ShopPage(
-                                        category: '',
-                                        keyword: controller.text,
-                                      )));
-                        },
-                        style: CusTextStyle.bodyText,
-                        decoration: InputDecoration(
-                            hintText: 'Mau sewa apa?',
-                            hintStyle: CusTextStyle.bodyText
-                                .copyWith(color: CusColor.disable),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2),
-                            filled: true,
-                            fillColor: Colors.white,
-                            suffixIcon: Container(
-                              color: CusColor.green,
-                              padding: EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.search_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(
-                                    color: CusColor.border, width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(
-                                    color: CusColor.border, width: 2))),
-                      )),
-                )
-              : GestureDetector(
-                  onTap: () => setState(() {
-                        _showSearch = true;
-                      }),
-                  child: SizedBox(
-                      height: 40,
-                      child:
-                          Icon(Icons.search_rounded, color: CusColor.green))),
-          HorizontalSeparator(width: 2),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed('/account'),
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              width: 40,
-              height: 40,
-              decoration:
-                  BoxDecoration(color: CusColor.border, shape: BoxShape.circle),
-              child: pref.getBool(SharedPreferencesManager.keyAuth) ?? false
-                  ? Image.network(
-                      pref.getString(
-                              SharedPreferencesManager.keyProfileImage) ??
-                          '',
-                      fit: BoxFit.fitWidth)
-                  : Center(
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-            ),
-          )
-        ],
-      ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10),
+          child: Divider(color: Color(0xffbebbbb)),
+        ),
+      ],
     );
   }
 
   Widget smallWidget() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Visibility(
-            visible: !_showSearch,
-            child: SizedBox(
-              height: 40,
-              child: GestureDetector(
-                onTap: () => widget.scaffoldKey.currentState!.openDrawer(),
-                child: Icon(
-                  Icons.menu_rounded,
-                  color: CusColor.green,
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10, vertical: 8),
+          color: Colors.white,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Visibility(
+                visible: !_showSearch,
+                child: SizedBox(
+                  height: 40,
+                  child: GestureDetector(
+                    onTap: () => widget.scaffoldKey.currentState!.openDrawer(),
+                    child: Icon(
+                      Icons.menu_rounded,
+                      color: CusColor.green,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Visibility(
+                visible: !_showSearch,
+                child: Image.asset(
+                  Assets.icons.sevvaLogoJpg.path,
+                  fit: BoxFit.fitWidth,
+                  width: 150,
+                ),
+              ),
+              _showSearch
+                  ? Expanded(
+                      child: SizedBox(
+                          width: SizeConfig.screenWidth,
+                          height: 40,
+                          child: TextFormField(
+                            onTapOutside: (event) => setState(() {
+                              _showSearch = false;
+                            }),
+                            onEditingComplete: () {
+                              context.go(
+                                  '/shop?category=&keyword=${controller.text}');
+                            },
+                            style: CusTextStyle.bodyText,
+                            decoration: InputDecoration(
+                                hintText: 'Mau sewa apa?',
+                                hintStyle: CusTextStyle.bodyText
+                                    .copyWith(color: CusColor.disable),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 2),
+                                filled: true,
+                                fillColor: Colors.white,
+                                suffixIcon: Container(
+                                  color: CusColor.green,
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(
+                                    Icons.search_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide: BorderSide(
+                                        color: CusColor.border, width: 2)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide: BorderSide(
+                                        color: CusColor.border, width: 2))),
+                          )),
+                    )
+                  : GestureDetector(
+                      onTap: () => setState(() {
+                            _showSearch = true;
+                          }),
+                      child: SizedBox(
+                          height: 40,
+                          child: Icon(Icons.search_rounded,
+                              color: CusColor.green))),
+            ],
           ),
-          Visibility(
-            visible: !_showSearch,
-            child: Image.asset(
-              Assets.icons.sevvaLogoJpg.path,
-              fit: BoxFit.fitWidth,
-              width: 150,
-            ),
-          ),
-          _showSearch
-              ? Expanded(
-                  child: SizedBox(
-                      width: SizeConfig.screenWidth,
-                      height: 40,
-                      child: TextFormField(
-                        onTapOutside: (event) => setState(() {
-                          _showSearch = false;
-                        }),
-                        onEditingComplete: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => ShopPage(
-                                        category: '',
-                                        keyword: controller.text,
-                                      )));
-                        },
-                        style: CusTextStyle.bodyText,
-                        decoration: InputDecoration(
-                            hintText: 'Mau sewa apa?',
-                            hintStyle: CusTextStyle.bodyText
-                                .copyWith(color: CusColor.disable),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2),
-                            filled: true,
-                            fillColor: Colors.white,
-                            suffixIcon: Container(
-                              color: CusColor.green,
-                              padding: EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.search_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(
-                                    color: CusColor.border, width: 2)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(
-                                    color: CusColor.border, width: 2))),
-                      )),
-                )
-              : GestureDetector(
-                  onTap: () => setState(() {
-                        _showSearch = true;
-                      }),
-                  child: SizedBox(
-                      height: 40,
-                      child:
-                          Icon(Icons.search_rounded, color: CusColor.green))),
-        ],
-      ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 10),
+          child: Divider(color: Color(0xffbebbbb)),
+        ),
+      ],
     );
   }
 }
@@ -396,14 +409,14 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             VerticalSeparator(height: 5),
             GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/'),
+                onTap: () => context.go('/'),
                 child: Text('Home',
                     style: widget.index == 0
                         ? CusTextStyle.navText.copyWith(color: CusColor.green)
                         : CusTextStyle.navText)),
             VerticalSeparator(height: 3),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/shop'),
+              onTap: () => context.go('/shop'),
               child: Text('Shop',
                   style: widget.index == 1
                       ? CusTextStyle.navText.copyWith(color: CusColor.green)
@@ -411,7 +424,7 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             VerticalSeparator(height: 3),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/cart'),
+              onTap: () => context.go('/cart'),
               child: Text('Cart',
                   style: widget.index == 2
                       ? CusTextStyle.navText.copyWith(color: CusColor.green)
@@ -419,7 +432,7 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             Spacer(),
             GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed('/account'),
+              onTap: () => context.go('/account'),
               child: Row(
                 children: [
                   Container(

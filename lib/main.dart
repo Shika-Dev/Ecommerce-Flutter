@@ -4,13 +4,11 @@ import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.
 import 'package:ecom_web_flutter/firebase_options.dart';
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
-import 'package:ecom_web_flutter/pages/account_page.dart';
-import 'package:ecom_web_flutter/pages/cart_page.dart';
-import 'package:ecom_web_flutter/pages/shop_page.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:ecom_web_flutter/style/currency_format.dart';
 import 'package:ecom_web_flutter/style/style.dart';
 import 'package:ecom_web_flutter/utils/auth.dart';
+import 'package:ecom_web_flutter/utils/router.dart';
 import 'package:ecom_web_flutter/utils/separator.dart';
 import 'package:ecom_web_flutter/utils/size.dart';
 import 'package:ecom_web_flutter/widget/contact.dart';
@@ -18,15 +16,14 @@ import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_strategy/url_strategy.dart';
 
 import 'api_repository/models/models.dart';
 
 void main() async {
   await setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
-  setPathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -35,18 +32,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Metronome SoundSystem',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomePage(),
-        '/account': (context) => const AccountPage(),
-        '/shop': (context) => const ShopPage(
-              category: '',
-            ),
-        '/cart': (context) => const CartPage()
-      },
+      routerConfig: routerConfig,
       theme: ThemeData(fontFamily: 'JosefinSans'),
     );
   }
@@ -69,6 +58,41 @@ class _HomePageState extends State<HomePage> {
   );
   PageController _catController = PageController(initialPage: 0);
   ScrollController _mainListView = ScrollController();
+
+  List<LinearGradient> listGradientColor = const [
+    LinearGradient(colors: [
+      Color(0xffc70ab3),
+      Color(0xffee6bd2),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xff17c70a),
+      Color(0xff8cee6b),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xff0a23c7),
+      Color(0xff6b85ee),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xffc7be0a),
+      Color(0xffeedd6b),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xff0ac7b7),
+      Color(0xff6beee3),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xffc70a0a),
+      Color(0xffee6b6b),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xffc73c0a),
+      Color(0xffee8a6b),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+    LinearGradient(colors: [
+      Color(0xff0ac762),
+      Color(0xff6bee94),
+    ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+  ];
 
   @override
   void initState() {
@@ -320,307 +344,175 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                   : SizedBox(),
-              VerticalSeparator(height: 5),
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: SizeConfig.safeBlockHorizontal * 25,
-                      padding: EdgeInsets.only(top: 34, left: 25),
-                      decoration: BoxDecoration(
-                          color: Color(0xffFFF6FB),
-                          boxShadow: [CusBoxShadow.shadow]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '23% off in all products',
-                            style: CusTextStyle.itemText
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          VerticalSeparator(height: 1),
-                          Text(
-                            'Shop Now',
-                            style: CusTextStyle.itemText.copyWith(
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w500,
-                                color: CusColor.green,
-                                decoration: TextDecoration.underline,
-                                decorationColor: CusColor.green),
-                          ),
-                          VerticalSeparator(height: 1),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Image.asset(
-                                Assets.images.imgClock.path,
-                                width: SizeConfig.safeBlockHorizontal * 10,
-                                fit: BoxFit.fitWidth,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: SizeConfig.safeBlockHorizontal * 25,
-                      padding: EdgeInsets.only(top: 34, left: 25),
-                      decoration: BoxDecoration(
-                          color: Color(0xffEEEFFB),
-                          boxShadow: [CusBoxShadow.shadow]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '23% off in all products',
-                            style: CusTextStyle.itemText
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          VerticalSeparator(height: 1),
-                          Text(
-                            'View Collection',
-                            style: CusTextStyle.itemText.copyWith(
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w500,
-                                color: CusColor.green,
-                                decoration: TextDecoration.underline,
-                                decorationColor: CusColor.green),
-                          ),
-                          VerticalSeparator(height: 1),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Image.asset(
-                                Assets.images.imgWardrobe.path,
-                                width: SizeConfig.safeBlockHorizontal * 20,
-                                fit: BoxFit.fitWidth,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              color: Color(0xffF5F6F8),
-                              width: SizeConfig.safeBlockHorizontal * 7,
-                              height: SizeConfig.safeBlockVertical * 9,
-                            ),
-                            HorizontalSeparator(width: 2),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Executive Seat chair',
-                                  style: CusTextStyle.itemText
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                VerticalSeparator(height: 1),
-                                Text(
-                                  '\$32.00',
-                                  style: CusTextStyle.itemText.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: CusColor.blue),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 1),
-                        Row(
-                          children: [
-                            Container(
-                              color: Color(0xffF5F6F8),
-                              width: SizeConfig.safeBlockHorizontal * 7,
-                              height: SizeConfig.safeBlockVertical * 9,
-                            ),
-                            HorizontalSeparator(width: 2),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Executive Seat chair',
-                                  style: CusTextStyle.itemText
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                VerticalSeparator(height: 1),
-                                Text(
-                                  '\$32.00',
-                                  style: CusTextStyle.itemText.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: CusColor.blue),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        VerticalSeparator(height: 1),
-                        Row(
-                          children: [
-                            Container(
-                              color: Color(0xffF5F6F8),
-                              width: SizeConfig.safeBlockHorizontal * 7,
-                              height: SizeConfig.safeBlockVertical * 9,
-                            ),
-                            HorizontalSeparator(width: 2),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Executive Seat chair',
-                                  style: CusTextStyle.itemText
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                VerticalSeparator(height: 1),
-                                Text(
-                                  '\$32.00',
-                                  style: CusTextStyle.itemText.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: CusColor.blue),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
               VerticalSeparator(height: 10),
               Center(
                 child: Text(
-                  'What We Offer!',
+                  'Kenapa Metronom Soundsystem?',
                   style: CusTextStyle.bodyText
                       .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
                 ),
               ),
-              VerticalSeparator(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icDelivery.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Pengiriman',
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
+              VerticalSeparator(height: 5),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(.1))
+                    ]),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: ((SizeConfig.safeBlockHorizontal * 80) - 48) / 5,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(Assets.images.icDelivery.path,
+                              width: SizeConfig.safeBlockHorizontal * 3,
+                              fit: BoxFit.fitWidth),
+                          HorizontalSeparator(width: 2),
+                          SizedBox(
+                            width:
+                                (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                                        5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Solusi Satu Pintu',
+                                  style: CusTextStyle.itemText.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                VerticalSeparator(height: .5),
+                                Text(
+                                  'Kemudahan Pembuatan Acara',
+                                  style: CusTextStyle.itemText
+                                      .copyWith(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icCashback.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Negosiasi Harga',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
+                    Spacer(),
+                    SizedBox(
+                      width: ((SizeConfig.safeBlockHorizontal * 80) - 48) / 5,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(Assets.images.icCall24.path,
+                              width: SizeConfig.safeBlockHorizontal * 3,
+                              fit: BoxFit.fitWidth),
+                          HorizontalSeparator(width: 2),
+                          SizedBox(
+                            width:
+                                (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                                        5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Layanan 24 Jam',
+                                  style: CusTextStyle.itemText.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                VerticalSeparator(height: .5),
+                                Text(
+                                  'Dukungan teknis setiap saat',
+                                  style: CusTextStyle.itemText
+                                      .copyWith(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icPremium.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Jaminan Kerusakan',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Kami menjamin setiap barang kami berfungsi dengan baik, dan kami ganti jika rusak sebelum acara anda mulai',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
+                    Spacer(),
+                    SizedBox(
+                      width: ((SizeConfig.safeBlockHorizontal * 80) - 48) / 5,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(Assets.images.icPremium.path,
+                              width: SizeConfig.safeBlockHorizontal * 3,
+                              fit: BoxFit.fitWidth),
+                          HorizontalSeparator(width: 2),
+                          SizedBox(
+                            width:
+                                (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                                        5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Jaminan Pelayanan Terbaik',
+                                  style: CusTextStyle.itemText.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                VerticalSeparator(height: .5),
+                                Text(
+                                  'Penggunaan barang dan SDM terbaik',
+                                  style: CusTextStyle.itemText
+                                      .copyWith(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icCall24.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Pembayaran Mudah',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Konfirmasi pembayaran tidak diperlukan karena sistem pembayaran terintegrasi otomatis dengan kami',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
+                    Spacer(),
+                    SizedBox(
+                      width: ((SizeConfig.safeBlockHorizontal * 80) - 48) / 5,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(Assets.images.icCashback.path,
+                              width: SizeConfig.safeBlockHorizontal * 3,
+                              fit: BoxFit.fitWidth),
+                          HorizontalSeparator(width: 2),
+                          SizedBox(
+                            width:
+                                (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                                        5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Kemudahan Pembayaran',
+                                  style: CusTextStyle.itemText.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                VerticalSeparator(height: .5),
+                                Text(
+                                  'Sistem pembayaran terintegrasi otomatis',
+                                  style: CusTextStyle.itemText
+                                      .copyWith(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-              VerticalSeparator(height: 10),
+              VerticalSeparator(height: 5),
               Center(
                 child: Text(
                   'Featured Products',
@@ -872,235 +764,243 @@ class _HomePageState extends State<HomePage> {
               ),
               VerticalSeparator(height: 5),
               Container(
-                width: SizeConfig.safeBlockHorizontal * 30,
-                padding: EdgeInsets.only(top: 34, left: 25),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 decoration: BoxDecoration(
-                    color: Color(0xffFFF6FB), boxShadow: [CusBoxShadow.shadow]),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(.1))
+                    ]),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '23% off in all products',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Text(
-                      'Shop Now',
-                      style: CusTextStyle.itemText.copyWith(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                          color: CusColor.green,
-                          decoration: TextDecoration.underline,
-                          decorationColor: CusColor.green),
-                    ),
-                    VerticalSeparator(height: 1),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Image.asset(
-                          Assets.images.imgClock.path,
-                          width: SizeConfig.safeBlockHorizontal * 15,
-                          fit: BoxFit.fitWidth,
-                        )
+                        SizedBox(
+                          width: ((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(Assets.images.icDelivery.path,
+                                  width: SizeConfig.safeBlockHorizontal * 3,
+                                  fit: BoxFit.fitWidth),
+                              HorizontalSeparator(width: 2),
+                              SizedBox(
+                                width: (((SizeConfig.safeBlockHorizontal * 80) -
+                                            48) /
+                                        2.5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Solusi Satu Pintu',
+                                      style: CusTextStyle.itemText.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    VerticalSeparator(height: .5),
+                                    Text(
+                                      'Kemudahan Pembuatan Acara',
+                                      style: CusTextStyle.itemText
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        SizedBox(
+                          width: ((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(Assets.images.icCall24.path,
+                                  width: SizeConfig.safeBlockHorizontal * 3,
+                                  fit: BoxFit.fitWidth),
+                              HorizontalSeparator(width: 2),
+                              SizedBox(
+                                width: (((SizeConfig.safeBlockHorizontal * 80) -
+                                            48) /
+                                        2.5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Layanan 24 Jam',
+                                      style: CusTextStyle.itemText.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    VerticalSeparator(height: .5),
+                                    Text(
+                                      'Dukungan teknis setiap saat',
+                                      style: CusTextStyle.itemText
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                    )
+                    ),
+                    VerticalSeparator(height: 3),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: ((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(Assets.images.icPremium.path,
+                                  width: SizeConfig.safeBlockHorizontal * 3,
+                                  fit: BoxFit.fitWidth),
+                              HorizontalSeparator(width: 2),
+                              SizedBox(
+                                width: (((SizeConfig.safeBlockHorizontal * 80) -
+                                            48) /
+                                        2.5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Jaminan Pelayanan Terbaik',
+                                      style: CusTextStyle.itemText.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    VerticalSeparator(height: .5),
+                                    Text(
+                                      'Penggunaan barang dan SDM terbaik',
+                                      style: CusTextStyle.itemText
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        SizedBox(
+                          width: ((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(Assets.images.icCashback.path,
+                                  width: SizeConfig.safeBlockHorizontal * 3,
+                                  fit: BoxFit.fitWidth),
+                              HorizontalSeparator(width: 2),
+                              SizedBox(
+                                width: (((SizeConfig.safeBlockHorizontal * 80) -
+                                            48) /
+                                        2.5) -
+                                    SizeConfig.safeBlockHorizontal * 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Kemudahan Pembayaran',
+                                      style: CusTextStyle.itemText.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    VerticalSeparator(height: .5),
+                                    Text(
+                                      'Sistem pembayaran terintegrasi otomatis',
+                                      style: CusTextStyle.itemText
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-              VerticalSeparator(height: 2),
+              VerticalSeparator(height: 5),
               Container(
-                width: SizeConfig.safeBlockHorizontal * 30,
-                padding: EdgeInsets.only(top: 34, left: 25),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 decoration: BoxDecoration(
-                    color: Color(0xffEEEFFB), boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(.1))
+                    ]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '23% off in all products',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Text(
-                      'View Collection',
-                      style: CusTextStyle.itemText.copyWith(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                          color: CusColor.green,
-                          decoration: TextDecoration.underline,
-                          decorationColor: CusColor.green),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Image.asset(Assets.images.icDelivery.path,
+                        width: SizeConfig.safeBlockHorizontal * 5,
+                        fit: BoxFit.fitWidth),
+                    Column(
                       children: [
-                        Image.asset(
-                          Assets.images.imgWardrobe.path,
-                          width: SizeConfig.safeBlockHorizontal * 25,
-                          fit: BoxFit.fitWidth,
-                        )
+                        Text(
+                          'Solusi Satu Pintu',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 22, fontWeight: FontWeight.w500),
+                        ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Kemudahan Pembuatan Acara',
+                          textAlign: TextAlign.center,
+                          style: CusTextStyle.itemText.copyWith(
+                              color: CusColor.disable,
+                              fontWeight: FontWeight.w700),
+                        ),
                       ],
-                    )
+                    ),
+                    Container(
+                      width: SizeConfig.safeBlockHorizontal * 35,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 45),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [CusBoxShadow.shadow]),
+                      child: Column(
+                        children: [
+                          Image.asset(Assets.images.icCashback.path,
+                              width: SizeConfig.safeBlockHorizontal * 5,
+                              fit: BoxFit.fitWidth),
+                          VerticalSeparator(height: 2),
+                          Text(
+                            'Negosiasi Harga',
+                            textAlign: TextAlign.center,
+                            style: CusTextStyle.itemText.copyWith(
+                                fontSize: 22, fontWeight: FontWeight.w500),
+                          ),
+                          VerticalSeparator(height: 2),
+                          Text(
+                            'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
+                            textAlign: TextAlign.center,
+                            style: CusTextStyle.itemText.copyWith(
+                                color: CusColor.disable,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 2),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 2),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 15,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 2),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              VerticalSeparator(height: 10),
-              Center(
-                child: Text(
-                  'What We Offer!',
-                  style: CusTextStyle.bodyText
-                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
-                ),
-              ),
-              VerticalSeparator(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icDelivery.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Pengiriman',
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icCashback.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Negosiasi Harga',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
               VerticalSeparator(height: 2),
               Row(
@@ -1501,302 +1401,143 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                   : SizedBox(),
-              VerticalSeparator(height: 5),
-              Container(
-                width: SizeConfig.safeBlockHorizontal * 30,
-                padding: EdgeInsets.only(top: 34, left: 25),
-                decoration: BoxDecoration(
-                    color: Color(0xffFFF6FB), boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '23% off in all products',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Text(
-                      'Shop Now',
-                      style: CusTextStyle.itemText.copyWith(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                          color: CusColor.green,
-                          decoration: TextDecoration.underline,
-                          decorationColor: CusColor.green),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset(
-                          Assets.images.imgClock.path,
-                          width: SizeConfig.safeBlockHorizontal * 15,
-                          fit: BoxFit.fitWidth,
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              VerticalSeparator(height: 2),
-              Container(
-                width: SizeConfig.safeBlockHorizontal * 30,
-                padding: EdgeInsets.only(top: 34, left: 25),
-                decoration: BoxDecoration(
-                    color: Color(0xffEEEFFB), boxShadow: [CusBoxShadow.shadow]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '23% off in all products',
-                      style: CusTextStyle.itemText
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Text(
-                      'View Collection',
-                      style: CusTextStyle.itemText.copyWith(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                          color: CusColor.green,
-                          decoration: TextDecoration.underline,
-                          decorationColor: CusColor.green),
-                    ),
-                    VerticalSeparator(height: 1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset(
-                          Assets.images.imgWardrobe.path,
-                          width: SizeConfig.safeBlockHorizontal * 25,
-                          fit: BoxFit.fitWidth,
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 20,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 20,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              VerticalSeparator(height: 2),
-              Row(
-                children: [
-                  Container(
-                    color: Color(0xffF5F6F8),
-                    width: SizeConfig.safeBlockHorizontal * 20,
-                    height: SizeConfig.safeBlockVertical * 17,
-                  ),
-                  HorizontalSeparator(width: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Executive Seat chair',
-                        style: CusTextStyle.itemText
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      VerticalSeparator(height: 1),
-                      Text(
-                        '\$32.00',
-                        style: CusTextStyle.itemText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: CusColor.blue),
-                      )
-                    ],
-                  )
-                ],
-              ),
               VerticalSeparator(height: 10),
               Center(
                 child: Text(
-                  'What We Offer!',
+                  'Kenapa Metronom Soundsystem?',
                   style: CusTextStyle.bodyText
                       .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
                 ),
               ),
-              VerticalSeparator(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
+              VerticalSeparator(height: 5),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(.1))
+                    ]),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Image.asset(Assets.images.icDelivery.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Pengiriman',
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
+                        SizedBox(
+                          width: (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5),
+                          child: Column(
+                            children: [
+                              Image.asset(Assets.images.icDelivery.path,
+                                  width: SizeConfig.safeBlockHorizontal * 10,
+                                  fit: BoxFit.fitWidth),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                'Solusi Satu Pintu',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                              VerticalSeparator(height: .5),
+                              Text(
+                                'Kemudahan Pembuatan Acara',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText
+                                    .copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Harga di situs web kami mencakup pengiriman di DKI Jakarta; biaya tambahan berlaku untuk pengiriman luar kota',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
+                        Spacer(),
+                        SizedBox(
+                          width: (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5),
+                          child: Column(
+                            children: [
+                              Image.asset(Assets.images.icCall24.path,
+                                  width: SizeConfig.safeBlockHorizontal * 10,
+                                  fit: BoxFit.fitWidth),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                'Layanan 24 Jam',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                              VerticalSeparator(height: .5),
+                              Text(
+                                'Dukungan teknis setiap saat',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText
+                                    .copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
+                    VerticalSeparator(height: 3),
+                    Row(
                       children: [
-                        Image.asset(Assets.images.icCashback.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Negosiasi Harga',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
+                        SizedBox(
+                          width: (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5),
+                          child: Column(
+                            children: [
+                              Image.asset(Assets.images.icPremium.path,
+                                  width: SizeConfig.safeBlockHorizontal * 10,
+                                  fit: BoxFit.fitWidth),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                'Jaminan Pelayanan Terbaik',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                              VerticalSeparator(height: .5),
+                              Text(
+                                'Penggunaan barang dan SDM terbaik',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText
+                                    .copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Hubungi Admin Metronom Sound System melalui WhatsApp atau E-mail untuk negosiasi harga pesanan Anda',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
+                        Spacer(),
+                        SizedBox(
+                          width: (((SizeConfig.safeBlockHorizontal * 80) - 48) /
+                              2.5),
+                          child: Column(
+                            children: [
+                              Image.asset(Assets.images.icCashback.path,
+                                  width: SizeConfig.safeBlockHorizontal * 10,
+                                  fit: BoxFit.fitWidth),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                'Kemudahan Pembayaran',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                              VerticalSeparator(height: .5),
+                              Text(
+                                'Sistem pembayaran terintegrasi otomatis',
+                                textAlign: TextAlign.center,
+                                style: CusTextStyle.itemText
+                                    .copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              VerticalSeparator(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icPremium.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        HorizontalSeparator(width: 2),
-                        Text(
-                          'Jaminan Kerusakan',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Kami menjamin setiap barang kami berfungsi dengan baik, dan kami ganti jika rusak sebelum acara anda mulai',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  ),
-                  VerticalSeparator(height: 2),
-                  Container(
-                    width: SizeConfig.safeBlockHorizontal * 35,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 45),
-                    decoration: BoxDecoration(
-                        color: Colors.white, boxShadow: [CusBoxShadow.shadow]),
-                    child: Column(
-                      children: [
-                        Image.asset(Assets.images.icCall24.path,
-                            width: SizeConfig.safeBlockHorizontal * 5,
-                            fit: BoxFit.fitWidth),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Pembayaran Mudah',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        VerticalSeparator(height: 2),
-                        Text(
-                          'Konfirmasi pembayaran tidak diperlukan karena sistem pembayaran terintegrasi otomatis dengan kami',
-                          textAlign: TextAlign.center,
-                          style: CusTextStyle.itemText.copyWith(
-                              color: CusColor.disable,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              VerticalSeparator(height: 10),
+              VerticalSeparator(height: 5),
               Center(
                 child: Text(
                   'Featured Products',
@@ -1944,7 +1685,7 @@ class _HomePageState extends State<HomePage> {
                     TextButton(
                       child: const Text("Login"),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/account');
+                        context.go('/account');
                       },
                     ),
                     TextButton(

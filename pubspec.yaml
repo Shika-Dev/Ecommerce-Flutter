@@ -45,7 +45,7 @@ dependencies:
   flutter_svg: ^2.0.9
 
   fl_chart: ^0.36.1
-  google_fonts: ^2.1.0
+  google_fonts: ^6.1.0
   flutter_icons:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons.git
@@ -59,9 +59,11 @@ dependencies:
   syncfusion_flutter_pdf: ^23.1.41
   syncfusion_flutter_datepicker: ^23.1.41
   flutter_dotenv: ^5.1.0
-  url_strategy: ^0.2.0
   url_launcher: ^6.1.14
   flutter_native_splash: ^2.3.5
+  go_router: ^13.0.1
+  flutter_bloc: ^8.1.3
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   json_serializable: ^6.7.1

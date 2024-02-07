@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecom_web_flutter/api_repository/models/models.dart';
+import 'package:ecom_web_flutter/api_repository/models/product_by_id_model.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,8 @@ class Generic {
       return SignInModel.fromJson(json) as T;
     } else if (T == CartModel) {
       return CartModel.fromJson(json) as T;
+    } else if (T == ProductByIdModel) {
+      return ProductByIdModel.fromJson(json) as T;
     } else if (T == CategoryModel) {
       return CategoryModel.fromJson(json) as T;
     } else if (T == bool || T == String || T == int || T == double) {

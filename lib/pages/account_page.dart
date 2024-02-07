@@ -9,6 +9,7 @@ import 'package:ecom_web_flutter/widget/contact.dart';
 import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountPage extends StatefulWidget {
@@ -132,10 +133,10 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () async {
                     if (_isAuthorized) {
                       await handleSignOut();
-                      Navigator.pushReplacementNamed(context, '/');
+                      context.go('/');
                     } else {
                       await handleSignIn();
-                      Navigator.pushReplacementNamed(context, '/');
+                      context.go('/');
                     }
                   },
                   child: Container(
@@ -237,10 +238,10 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () async {
                     if (_isAuthorized) {
                       await handleSignOut();
-                      Navigator.pushReplacementNamed(context, '/');
+                      context.go('/');
                     } else {
                       await handleSignIn();
-                      Navigator.pushReplacementNamed(context, '/');
+                      context.go('/');
                     }
                   },
                   child: Container(

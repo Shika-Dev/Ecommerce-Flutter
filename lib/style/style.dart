@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CusTextStyle {
-  static TextStyle bodyText = TextStyle(
-      fontFamily: 'JosefinSans',
-      fontSize: 16,
-      color: CusColor.black,
-      fontWeight: FontWeight.w400);
+  static TextStyle bodyText = GoogleFonts.lato(
+      textStyle: TextStyle(
+          fontSize: 16, color: CusColor.black, fontWeight: FontWeight.w400));
 
-  static TextStyle itemText = TextStyle(
-      fontFamily: 'JosefinSans',
-      fontSize: 16,
-      color: CusColor.black,
-      fontWeight: FontWeight.w400);
+  static TextStyle itemText = GoogleFonts.lato(
+      textStyle: TextStyle(
+          fontSize: 16, color: CusColor.black, fontWeight: FontWeight.w400));
 
-  static TextStyle navText = TextStyle(
-      fontFamily: 'Lato',
-      fontSize: 16,
-      color: CusColor.black,
-      fontWeight: FontWeight.w400);
+  static TextStyle navText = GoogleFonts.lato(
+      textStyle: TextStyle(
+          fontSize: 16, color: CusColor.black, fontWeight: FontWeight.w400));
 }
 
 class CusColor {

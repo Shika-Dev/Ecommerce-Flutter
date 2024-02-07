@@ -18,6 +18,7 @@ import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -390,7 +391,7 @@ class _CartPageState extends State<CartPage> {
                     };
                     var model = await deleteFromCart(body);
                     if (model.errors != null) {
-                      Navigator.pushReplacementNamed(context, '/cart');
+                      context.go('/cart');
                     } else {
                       print(model.errors.toString());
                     }
@@ -452,7 +453,7 @@ class _CartPageState extends State<CartPage> {
                         };
                         var model = await addToCart(body);
                         if (model.errors != null) {
-                          Navigator.pushReplacementNamed(context, '/cart');
+                          context.go('/cart');
                         } else {
                           print(model.errors.toString());
                         }
@@ -510,7 +511,7 @@ class _CartPageState extends State<CartPage> {
                     };
                     var model = await addToCart(body);
                     if (model.errors != null) {
-                      Navigator.pushReplacementNamed(context, '/cart');
+                      context.go('/cart');
                     } else {
                       print(model.errors.toString());
                     }
@@ -620,8 +621,7 @@ class _CartPageState extends State<CartPage> {
                                     elevation: 0,
                                     backgroundColor: Color(0xff19D16F)),
                                 onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/shop');
+                                  context.go('/shop');
                                 },
                                 child: Text(
                                   'Kembali Belanja',
@@ -894,7 +894,7 @@ class _CartPageState extends State<CartPage> {
                           style: ElevatedButton.styleFrom(
                               elevation: 0, backgroundColor: Color(0xff19D16F)),
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/shop');
+                            context.go('/shop');
                           },
                           child: Text(
                             'Kembali Belanja',
