@@ -21,3 +21,8 @@ class GetProductById extends ProductEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GetHomepageData extends ProductEvent {
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}

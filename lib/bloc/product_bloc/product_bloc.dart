@@ -11,6 +11,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(const ProductState.initial()) {
     on<GetProduct>((event, emit) => _getPaketInternet(emit, event));
     on<GetProductById>((event, emit) => _getProductById(emit, event));
+    on<GetHomepageData>((event, emit) => _getCategory(emit, event));
   }
 
   Future<void> _getPaketInternet(
@@ -40,6 +41,22 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       ProductByIdModel response = await fetchProductById(event.id);
       emit(ProductState.byIdSuccess(response.data!));
+    } catch (e) {
+      emit(ProductState.failure(e.toString()));
+    }
+  }
+
+  Future<void> _getCategory(
+    Emitter<ProductState> emit,
+    GetHomepageData event,
+  ) async {
+    emit(const ProductState.loading());
+    try {
+      CategoryModel response = await fetchAllCategory();
+      ProductModel featuredProduct = await fetchFeaturedProduct();
+      emit(ProductState.categorySuccess(
+          response.data!.categories.map((e) => e.category).toList(),
+          featuredProduct.data));
     } catch (e) {
       emit(ProductState.failure(e.toString()));
     }

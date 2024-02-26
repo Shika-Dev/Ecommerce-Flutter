@@ -1,12 +1,20 @@
 part of 'product_bloc.dart';
 
-enum ProductStatus { initial, loading, success, failure, byIdSuccess }
+enum ProductStatus {
+  initial,
+  loading,
+  success,
+  failure,
+  byIdSuccess,
+  categorySuccess
+}
 
 class ProductState extends Equatable {
   const ProductState.__({
     this.product,
     this.productList,
     this.errorMessage,
+    this.categoryList,
     required this.status,
   });
 
@@ -28,6 +36,13 @@ class ProductState extends Equatable {
           productList: listProduct,
         );
 
+  const ProductState.categorySuccess(
+      List<String> listCategory, List<ProductData>? listProduct)
+      : this.__(
+            status: ProductStatus.categorySuccess,
+            categoryList: listCategory,
+            productList: listProduct);
+
   const ProductState.failure(
     String errorMessage,
   ) : this.__(
@@ -36,10 +51,12 @@ class ProductState extends Equatable {
         );
 
   final List<ProductData>? productList;
+  final List<String>? categoryList;
   final ProductDataById? product;
   final String? errorMessage;
   final ProductStatus status;
 
   @override
-  List<Object?> get props => [productList, product, errorMessage, status];
+  List<Object?> get props =>
+      [productList, product, errorMessage, status, categoryList];
 }

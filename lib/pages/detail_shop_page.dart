@@ -1,6 +1,6 @@
 import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.dart';
 import 'package:ecom_web_flutter/api_repository/models/product_by_id_model.dart';
-import 'package:ecom_web_flutter/bloc/product_bloc.dart';
+import 'package:ecom_web_flutter/bloc/product_bloc/product_bloc.dart';
 import 'package:ecom_web_flutter/gen/assets.gen.dart';
 import 'package:ecom_web_flutter/injector/injector.dart';
 import 'package:ecom_web_flutter/storage/shared_preferences_manager.dart';
