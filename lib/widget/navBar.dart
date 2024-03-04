@@ -148,11 +148,7 @@ class _NavBarState extends State<NavBar> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.safeBlockHorizontal * 10),
-          child: Divider(color: Color(0xffbebbbb)),
-        ),
+        Divider(color: Color(0xffbebbbb)),
       ],
     );
   }
@@ -281,11 +277,7 @@ class _NavBarState extends State<NavBar> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.safeBlockHorizontal * 10),
-          child: Divider(color: Color(0xffbebbbb)),
-        ),
+        Divider(color: Color(0xffbebbbb)),
       ],
     );
   }

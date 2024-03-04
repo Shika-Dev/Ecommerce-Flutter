@@ -72,7 +72,7 @@ class _CartPageState extends State<CartPage> {
     Rect company_bounds = Rect.fromLTWH(0, 0, graphics.clientSize.width, 30);
 
     PdfTextElement element = PdfTextElement(
-        text: 'Metronome SoundSystem',
+        text: 'METRONOM SOUNDSYSTEM',
         font: PdfStandardFont(PdfFontFamily.timesRoman, 24,
             style: PdfFontStyle.bold));
 
@@ -102,13 +102,13 @@ class _CartPageState extends State<CartPage> {
         bounds: Rect.fromLTWH(10, company_result.bounds.bottom + 5, 0, 0))!;
 
     element =
-        PdfTextElement(text: 'Email: sevva.co.id@gmail.com', font: timesRoman);
+        PdfTextElement(text: 'Email: metronomsound@gmail.com', font: timesRoman);
     element.brush = PdfBrushes.black;
     company_result = element.draw(
         page: page,
         bounds: Rect.fromLTWH(10, company_result.bounds.bottom + 5, 0, 0))!;
 
-    PdfBrush solidBrush = PdfSolidBrush(PdfColor(126, 151, 173));
+    PdfBrush solidBrush = PdfSolidBrush(PdfColor(33,33,33));
 
     Rect bounds = Rect.fromLTWH(0, 160, graphics.clientSize.width, 30);
 
@@ -165,13 +165,16 @@ class _CartPageState extends State<CartPage> {
     result = element.draw(
         page: page, bounds: Rect.fromLTWH(10, result.bounds.bottom + 5, 0, 0))!;
 
-    print('Start: $start, End: $end');
+    DateTime startDate = DateTime.fromMillisecondsSinceEpoch(start);
+    DateTime endDate = DateTime.fromMillisecondsSinceEpoch(end);
     String sDate = DateFormat('dd MMMM yyyy')
-        .format(DateTime.fromMillisecondsSinceEpoch(start))
+        .format(startDate)
         .toString();
     String eDate = DateFormat('dd MMMM yyyy')
-        .format(DateTime.fromMillisecondsSinceEpoch(end))
+        .format(endDate)
         .toString();
+    int duration = endDate.difference(startDate).inDays + 1;
+    print('duration: $duration');
     element = PdfTextElement(
         text: 'Tanggal Event: $sDate - $eDate', font: timesRoman);
     element.brush = PdfBrushes.black;
@@ -197,13 +200,13 @@ class _CartPageState extends State<CartPage> {
     header.cells[0].value = 'Product Name';
     header.cells[1].value = 'Price';
     header.cells[2].value = 'Quantity';
-    header.cells[3].value = 'Unit';
+    header.cells[3].value = 'Days';
     header.cells[4].value = 'Total';
 
 //Creates the header style
     PdfGridCellStyle headerStyle = PdfGridCellStyle();
-    headerStyle.borders.all = PdfPen(PdfColor(126, 151, 173));
-    headerStyle.backgroundBrush = PdfSolidBrush(PdfColor(126, 151, 173));
+    headerStyle.borders.all = PdfPen(PdfColor(33,33,33));
+    headerStyle.backgroundBrush = PdfSolidBrush(PdfColor(33, 33, 33));
     headerStyle.textBrush = PdfBrushes.white;
     headerStyle.font = PdfStandardFont(PdfFontFamily.timesRoman, 14,
         style: PdfFontStyle.regular);
@@ -229,7 +232,7 @@ class _CartPageState extends State<CartPage> {
       row.cells[0].value = list[i].productName;
       row.cells[1].value = CurrencyFormat.convertToIdr(price, 0);
       row.cells[2].value = list[i].productQty.toString();
-      row.cells[3].value = list[i].productUnit;
+      row.cells[3].value = duration.toString();
       row.cells[4].value =
           CurrencyFormat.convertToIdr(price * list[i].productQty, 0);
     }
@@ -245,17 +248,30 @@ class _CartPageState extends State<CartPage> {
     //Set padding for grid cells
     grid.style.cellPadding = PdfPaddings(left: 2, right: 2, top: 2, bottom: 2);
 
-    //Creates the grid cell styles
-    PdfGridCellStyle cellStyle = PdfGridCellStyle();
-    cellStyle.borders.all = PdfPens.white;
-    cellStyle.borders.bottom = PdfPen(PdfColor(217, 217, 217), width: 0.70);
-    cellStyle.font = PdfStandardFont(PdfFontFamily.timesRoman, 12);
-    cellStyle.textBrush = PdfSolidBrush(PdfColor(131, 130, 136));
+    //odd cell Style
+    PdfGridCellStyle oddCellStyle = PdfGridCellStyle();
+    oddCellStyle.borders.all = PdfPens.white;
+    oddCellStyle.borders.bottom = PdfPen(PdfColor(217, 217, 217), width: 0.70);
+    oddCellStyle.font = PdfStandardFont(PdfFontFamily.timesRoman, 12);
+    oddCellStyle.textBrush = PdfSolidBrush(PdfColor(131, 130, 136));
+
+    //even cell style
+    PdfGridCellStyle evenCellStyle = PdfGridCellStyle();
+    evenCellStyle.borders.all = PdfPen(PdfColor(239,239,239));
+    evenCellStyle.backgroundBrush = PdfSolidBrush(PdfColor(239,239,239));
+    evenCellStyle.borders.bottom = PdfPen(PdfColor(239,239,239), width: 0.70);
+    evenCellStyle.font = PdfStandardFont(PdfFontFamily.timesRoman, 12);
+    evenCellStyle.textBrush = PdfSolidBrush(PdfColor(131, 130, 136));
     //Adds cell customizations
     for (int i = 0; i < grid.rows.count; i++) {
       PdfGridRow row = grid.rows[i];
       for (int j = 0; j < row.cells.count; j++) {
-        row.cells[j].style = cellStyle;
+        if((i+1).isOdd){
+          row.cells[j].style = oddCellStyle;
+        }else{
+          row.cells[j].style = evenCellStyle;
+        }
+        
         if (j == 0 || j == 1) {
           row.cells[j].stringFormat = PdfStringFormat(
               alignment: PdfTextAlignment.left,
@@ -283,20 +299,26 @@ class _CartPageState extends State<CartPage> {
         0, gridResult.bounds.bottom + 20, graphics.clientSize.width, 30);
 
     PdfFont bankFontStyle = PdfStandardFont(PdfFontFamily.timesRoman, 12);
+    PdfFont bankTitleFontStyle = PdfStandardFont(PdfFontFamily.timesRoman, 12, style: PdfFontStyle.bold);
 
-    element = PdfTextElement(text: 'BCA', font: bankFontStyle);
+    element = PdfTextElement(text: 'Payment Information', font: bankTitleFontStyle);
     element.brush = PdfBrushes.black;
     PdfLayoutResult bank_result = element.draw(
         page: page, bounds: Rect.fromLTWH(10, bank_bounds.top + 8, 0, 0))!;
 
+    element = PdfTextElement(text: 'Bank: BCA', font: bankFontStyle);
+    element.brush = PdfBrushes.black;
+    bank_result = element.draw(
+        page: page, bounds: Rect.fromLTWH(10, bank_bounds.bottom + 5, 0, 0))!;
+
     element =
-        PdfTextElement(text: 'a.n. Yusa Nanda Hardito', font: bankFontStyle);
+        PdfTextElement(text: 'Acc. Name : Metronom Disc Jockey PT', font: bankFontStyle);
     element.brush = PdfBrushes.black;
     bank_result = element.draw(
         page: page,
         bounds: Rect.fromLTWH(10, bank_result.bounds.bottom + 5, 0, 0))!;
 
-    element = PdfTextElement(text: '5005141751', font: bankFontStyle);
+    element = PdfTextElement(text: 'Acc. Number : 5005550227', font: bankFontStyle);
     element.brush = PdfBrushes.black;
     bank_result = element.draw(
         page: page,

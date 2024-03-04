@@ -22,7 +22,7 @@ class CusColor {
   static Color green = Color(0xff00605d);
   static Color red = Color(0xffFB2448);
   static Color border = Color(0xffE7E6EF);
-  static Color bgShade = Color(0xffF6F5FF);
+  static Color bgShade = Color(0xfff7f7f7);
   static Color footerText = Color(0xff8A8FB9);
   static Color disable = Color(0xff151875).withOpacity(.3);
 }
