@@ -444,7 +444,7 @@ class _HomePageState extends State<HomePage> {
               VerticalSeparator(height: 5),
               Center(
                 child: Text(
-                  'Featured Products',
+                  'Paling Sering Dipesan',
                   style: CusTextStyle.bodyText
                       .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
                 ),
@@ -480,8 +480,8 @@ class _HomePageState extends State<HomePage> {
                           height: 4,
                           decoration: BoxDecoration(
                               color: index == _currentPage
-                                  ? Color(0xffFB2E86)
-                                  : Color(0xffFEBAD7),
+                                  ? CusColor.black
+                                  : CusColor.black.withOpacity(.6),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                     separatorBuilder: (context, index) =>
@@ -761,7 +761,7 @@ class _HomePageState extends State<HomePage> {
               VerticalSeparator(height: 5),
               Center(
                 child: Text(
-                  'Featured Products',
+                  'Paling Sering Dipesan',
                   style: CusTextStyle.bodyText
                       .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
                 ),
@@ -1045,7 +1045,7 @@ class _HomePageState extends State<HomePage> {
                     horizontal: SizeConfig.safeBlockHorizontal * 10),
                 child: Center(
                   child: Text(
-                    'Featured Products',
+                    'Paling Sering Dipesan',
                     style: CusTextStyle.bodyText
                         .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
                   ),
