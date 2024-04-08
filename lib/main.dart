@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => ProductBloc(),
       child: MaterialApp.router(
-        title: 'Metronome SoundSystem',
+        title: 'Metronome Soundsystem',
         debugShowCheckedModeBanner: false,
         routerConfig: routerConfig,
         theme: ThemeData(fontFamily: 'JosefinSans'),
