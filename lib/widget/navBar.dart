@@ -43,46 +43,43 @@ class _NavBarState extends State<NavBar> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                Assets.icons.sevvaLogoJpg.path,
-                fit: BoxFit.fitWidth,
-                width: 150,
+              InkWell(
+                onTap: () => context.go('/'),
+                child: Image.asset(
+                  Assets.icons.sevvaLogoJpg.path,
+                  fit: BoxFit.fitWidth,
+                  width: 150,
+                ),
               ),
               HorizontalSeparator(width: 8),
-              GestureDetector(
+              InkWell(
                 onTap: () => context.go('/'),
                 child: Text('Home',
                     style: widget.index == 0
-                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                        : CusTextStyle.navText),
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText.copyWith(color: Colors.black45)),
               ),
               HorizontalSeparator(width: 2),
-              GestureDetector(
+              InkWell(
                 onTap: () => context.go('/shop'),
-                child: Text('Shop',
+                child: Text('Layanan',
                     style: widget.index == 1
-                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                        : CusTextStyle.navText),
-              ),
-              HorizontalSeparator(width: 2),
-              GestureDetector(
-                onTap: () => context.go('/cart'),
-                child: Text('Cart',
-                    style: widget.index == 2
-                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                        : CusTextStyle.navText),
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText.copyWith(color: Colors.black45)),
               ),
               Spacer(),
               Visibility(
                 visible: _showSearch,
-                replacement: GestureDetector(
+                replacement: InkWell(
                     onTap: () => setState(() {
                           _showSearch = true;
                         }),
                     child: SizedBox(
                         height: 40,
                         child:
-                            Icon(Icons.search_rounded, color: CusColor.green))),
+                            Icon(Icons.search_rounded, color: Colors.black45))),
                 child: SizedBox(
                     width: SizeConfig.safeBlockHorizontal * 20,
                     height: 40,
@@ -105,7 +102,7 @@ class _NavBarState extends State<NavBar> {
                           filled: true,
                           fillColor: Colors.white,
                           suffixIcon: Container(
-                            color: CusColor.green,
+                            color: CusColor.black,
                             padding: EdgeInsets.all(10),
                             child: Icon(
                               Icons.search_rounded,
@@ -123,7 +120,7 @@ class _NavBarState extends State<NavBar> {
                     )),
               ),
               HorizontalSeparator(width: 2),
-              GestureDetector(
+              InkWell(
                 onTap: () => context.go('/account'),
                 child: Container(
                   clipBehavior: Clip.hardEdge,
@@ -144,6 +141,12 @@ class _NavBarState extends State<NavBar> {
                           ),
                         ),
                 ),
+              ),
+              HorizontalSeparator(width: 1),
+              InkWell(
+                onTap: () => context.go('/cart'),
+                child:
+                    Icon(Icons.shopping_bag, color: Colors.black45, size: 30),
               )
             ],
           ),
@@ -163,44 +166,39 @@ class _NavBarState extends State<NavBar> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                Assets.icons.sevvaLogoJpg.path,
-                fit: BoxFit.fitWidth,
-                width: 150,
+              InkWell(
+                onTap: () => context.go('/'),
+                child: Image.asset(
+                  Assets.icons.sevvaLogoJpg.path,
+                  fit: BoxFit.fitWidth,
+                  width: 150,
+                ),
               ),
               HorizontalSeparator(width: 8),
               Visibility(
                 visible: !_showSearch,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () => context.go('/'),
                   child: Text('Home',
                       style: widget.index == 0
-                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                          : CusTextStyle.navText),
+                          ? CusTextStyle.navText
+                              .copyWith(fontWeight: FontWeight.w600)
+                          : CusTextStyle.navText
+                              .copyWith(color: Colors.black45)),
                 ),
               ),
               Visibility(
                   visible: !_showSearch, child: HorizontalSeparator(width: 2)),
               Visibility(
                 visible: !_showSearch,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () => context.go('/shop'),
-                  child: Text('Shop',
+                  child: Text('Layanan',
                       style: widget.index == 1
-                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                          : CusTextStyle.navText),
-                ),
-              ),
-              Visibility(
-                  visible: !_showSearch, child: HorizontalSeparator(width: 2)),
-              Visibility(
-                visible: !_showSearch,
-                child: GestureDetector(
-                  onTap: () => context.go('/cart'),
-                  child: Text('Cart',
-                      style: widget.index == 2
-                          ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                          : CusTextStyle.navText),
+                          ? CusTextStyle.navText
+                              .copyWith(fontWeight: FontWeight.w600)
+                          : CusTextStyle.navText
+                              .copyWith(color: Colors.black45)),
                 ),
               ),
               Spacer(),
@@ -226,7 +224,7 @@ class _NavBarState extends State<NavBar> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 suffixIcon: Container(
-                                  color: CusColor.green,
+                                  color: CusColor.black,
                                   padding: EdgeInsets.all(10),
                                   child: Icon(
                                     Icons.search_rounded,
@@ -243,16 +241,16 @@ class _NavBarState extends State<NavBar> {
                                         color: CusColor.border, width: 2))),
                           )),
                     )
-                  : GestureDetector(
+                  : InkWell(
                       onTap: () => setState(() {
                             _showSearch = true;
                           }),
                       child: SizedBox(
                           height: 40,
                           child: Icon(Icons.search_rounded,
-                              color: CusColor.green))),
+                              color: Colors.black45))),
               HorizontalSeparator(width: 2),
-              GestureDetector(
+              InkWell(
                 onTap: () => context.go('/account'),
                 child: Container(
                   clipBehavior: Clip.hardEdge,
@@ -273,7 +271,19 @@ class _NavBarState extends State<NavBar> {
                           ),
                         ),
                 ),
-              )
+              ),
+              Visibility(
+                  visible: !_showSearch, child: HorizontalSeparator(width: 2)),
+              Visibility(
+                visible: !_showSearch,
+                child: InkWell(
+                    onTap: () => context.go('/cart'),
+                    child: Icon(
+                      Icons.shopping_bag,
+                      color: Colors.black45,
+                      size: 30,
+                    )),
+              ),
             ],
           ),
         ),
@@ -297,21 +307,24 @@ class _NavBarState extends State<NavBar> {
                 visible: !_showSearch,
                 child: SizedBox(
                   height: 40,
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () => widget.scaffoldKey.currentState!.openDrawer(),
                     child: Icon(
                       Icons.menu_rounded,
-                      color: CusColor.green,
+                      color: CusColor.black,
                     ),
                   ),
                 ),
               ),
               Visibility(
                 visible: !_showSearch,
-                child: Image.asset(
-                  Assets.icons.sevvaLogoJpg.path,
-                  fit: BoxFit.fitWidth,
-                  width: 150,
+                child: InkWell(
+                  onTap: () => context.go('/'),
+                  child: Image.asset(
+                    Assets.icons.sevvaLogoJpg.path,
+                    fit: BoxFit.fitWidth,
+                    width: 150,
+                  ),
                 ),
               ),
               _showSearch
@@ -337,7 +350,7 @@ class _NavBarState extends State<NavBar> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 suffixIcon: Container(
-                                  color: CusColor.green,
+                                  color: CusColor.black,
                                   padding: EdgeInsets.all(10),
                                   child: Icon(
                                     Icons.search_rounded,
@@ -354,14 +367,14 @@ class _NavBarState extends State<NavBar> {
                                         color: CusColor.border, width: 2))),
                           )),
                     )
-                  : GestureDetector(
+                  : InkWell(
                       onTap: () => setState(() {
                             _showSearch = true;
                           }),
                       child: SizedBox(
                           height: 40,
                           child: Icon(Icons.search_rounded,
-                              color: CusColor.green))),
+                              color: CusColor.black))),
             ],
           ),
         ),
@@ -390,36 +403,43 @@ class _NavDrawerState extends State<NavDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              Assets.icons.sevvaLogoJpg.path,
-              fit: BoxFit.fitWidth,
-              width: 150,
+            InkWell(
+              onTap: () => context.go('/'),
+              child: Image.asset(
+                Assets.icons.sevvaLogoJpg.path,
+                fit: BoxFit.fitWidth,
+                width: 150,
+              ),
             ),
             VerticalSeparator(height: 5),
-            GestureDetector(
+            InkWell(
                 onTap: () => context.go('/'),
                 child: Text('Home',
                     style: widget.index == 0
-                        ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                        : CusTextStyle.navText)),
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText
+                            .copyWith(color: Colors.black45))),
             VerticalSeparator(height: 3),
-            GestureDetector(
-              onTap: () => context.go('/shop'),
-              child: Text('Shop',
-                  style: widget.index == 1
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
+            InkWell(
+                onTap: () => context.go('/shop'),
+                child: Text('Layanan',
+                    style: widget.index == 0
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText
+                            .copyWith(color: Colors.black45))),
             VerticalSeparator(height: 3),
-            GestureDetector(
-              onTap: () => context.go('/cart'),
-              child: Text('Cart',
-                  style: widget.index == 2
-                      ? CusTextStyle.navText.copyWith(color: CusColor.green)
-                      : CusTextStyle.navText),
-            ),
+            InkWell(
+                onTap: () => context.go('/cart'),
+                child: Text('Cart',
+                    style: widget.index == 2
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText
+                            .copyWith(color: Colors.black45))),
             Spacer(),
-            GestureDetector(
+            InkWell(
               onTap: () => context.go('/account'),
               child: Row(
                 children: [
