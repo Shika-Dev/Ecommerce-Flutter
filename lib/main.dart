@@ -492,6 +492,58 @@ class _HomePageState extends State<HomePage> {
               ),
               VerticalSeparator(height: 5),
               SizedBox(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.safeBlockVertical * 50,
+                child: OverflowBox(
+                  minWidth: SizeConfig.screenWidth,
+                  maxWidth: SizeConfig.screenWidth,
+                  maxHeight: SizeConfig.safeBlockVertical * 50,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.safeBlockHorizontal * 10),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Colors.black87, Colors.black26])),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal * 40,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Serahkan keperluan acara anda kepada kami, saatnya anda fokus pada pertumbuhan bisnis',
+                                style: CusTextStyle.bodyText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    color: Colors.white),
+                              ),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                  'Jadikan momen acara dengan memberikan pengalaman luar biasa untuk tim internal dan tamu undangan bersama Metronom Sound. Solusi pembuatan acara satu pintu, memberikan efisiensi dan harga yang terjangkau',
+                                  style: CusTextStyle.bodyText
+                                      .copyWith(color: Colors.white))
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Image.asset(
+                          'assets/images/recommendation_section.png',
+                          width: SizeConfig.safeBlockHorizontal * 30,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              SizedBox(
                 height: SizeConfig.safeBlockVertical * 35,
                 child: OverflowBox(
                   maxWidth: SizeConfig.safeBlockHorizontal * 100,
@@ -768,14 +820,13 @@ class _HomePageState extends State<HomePage> {
               ),
               VerticalSeparator(height: 5),
               SizedBox(
-                height: SizeConfig.safeBlockVertical * 84,
+                height: SizeConfig.safeBlockVertical * 60,
                 child: PageView(
                   pageSnapping: true,
                   controller: _pageController,
                   children: [...listWidget],
                 ),
               ),
-              VerticalSeparator(height: 5),
               Center(
                 child: SizedBox(
                   height: 4,
@@ -797,8 +848,8 @@ class _HomePageState extends State<HomePage> {
                           height: 4,
                           decoration: BoxDecoration(
                               color: index == _currentPage
-                                  ? Color(0xffFB2E86)
-                                  : Color(0xffFEBAD7),
+                                  ? CusColor.black
+                                  : CusColor.black.withOpacity(.6),
                               borderRadius: BorderRadius.circular(10))),
                     ),
                     separatorBuilder: (context, index) =>
@@ -807,7 +858,59 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              VerticalSeparator(height: 10),
+              VerticalSeparator(height: 5),
+              SizedBox(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.safeBlockVertical * 35,
+                child: OverflowBox(
+                  minWidth: SizeConfig.screenWidth,
+                  maxWidth: SizeConfig.screenWidth,
+                  maxHeight: SizeConfig.safeBlockVertical * 35,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.safeBlockHorizontal * 10),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Colors.black87, Colors.black26])),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal * 40,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Serahkan keperluan acara anda kepada kami, saatnya anda fokus pada pertumbuhan bisnis',
+                                style: CusTextStyle.bodyText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    color: Colors.white),
+                              ),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                  'Jadikan momen acara dengan memberikan pengalaman luar biasa untuk tim internal dan tamu undangan bersama Metronom Sound. Solusi pembuatan acara satu pintu, memberikan efisiensi dan harga yang terjangkau',
+                                  style: CusTextStyle.bodyText
+                                      .copyWith(color: Colors.white))
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Image.asset(
+                          'assets/images/recommendation_section.png',
+                          width: SizeConfig.safeBlockHorizontal * 40,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 5),
               SizedBox(
                 height: SizeConfig.safeBlockVertical * 35,
                 child: OverflowBox(
@@ -1090,8 +1193,8 @@ class _HomePageState extends State<HomePage> {
                             height: 4,
                             decoration: BoxDecoration(
                                 color: index == _currentPage
-                                    ? Color(0xffFB2E86)
-                                    : Color(0xffFEBAD7),
+                                    ? CusColor.black
+                                    : CusColor.black.withOpacity(.6),
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       separatorBuilder: (context, index) =>
