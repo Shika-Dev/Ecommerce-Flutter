@@ -887,7 +887,7 @@ class _HomePageState extends State<HomePage> {
                                 'Serahkan keperluan acara anda kepada kami, saatnya anda fokus pada pertumbuhan bisnis',
                                 style: CusTextStyle.bodyText.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 24,
+                                    fontSize: 20,
                                     color: Colors.white),
                               ),
                               VerticalSeparator(height: 1),
@@ -1202,6 +1202,45 @@ class _HomePageState extends State<HomePage> {
                       itemCount: page,
                     ),
                   ),
+                ),
+              ),
+              VerticalSeparator(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.safeBlockVertical * 50,
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 10),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.black87, Colors.black26])),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Spacer(),
+                    Image.asset(
+                      'assets/images/recommendation_section.png',
+                      width: SizeConfig.safeBlockHorizontal * 60,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    Spacer(),
+                    Text(
+                      'Serahkan keperluan acara anda kepada kami, saatnya anda fokus pada pertumbuhan bisnis',
+                      textAlign: TextAlign.center,
+                      style: CusTextStyle.bodyText.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.white),
+                    ),
+                    VerticalSeparator(height: 1),
+                    Text(
+                        'Jadikan momen acara dengan memberikan pengalaman luar biasa untuk tim internal dan tamu undangan bersama Metronom Sound. Solusi pembuatan acara satu pintu, memberikan efisiensi dan harga yang terjangkau',
+                        textAlign: TextAlign.center,
+                        style: CusTextStyle.bodyText
+                            .copyWith(color: Colors.white, fontSize: 14)),
+                    Spacer()
+                  ],
                 ),
               ),
               VerticalSeparator(height: 10),
