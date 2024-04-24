@@ -428,7 +428,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 VerticalSeparator(height: .5),
                                 Text(
-                                  'Kemudahan Pembuatan Acara',
+                                  'MSS untuk kebutuhan acara keseluruhan',
                                   style: CusTextStyle.itemText
                                       .copyWith(fontSize: 14),
                                 ),
@@ -464,7 +464,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 VerticalSeparator(height: .5),
                                 Text(
-                                  'Dukungan teknis setiap saat',
+                                  'Gratis konsultasi teknis setiap waktu',
                                   style: CusTextStyle.itemText
                                       .copyWith(fontSize: 14),
                                 ),
@@ -493,7 +493,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Jaminan Pelayanan Terbaik',
+                                  'Pelayanan Terbaik',
                                   style: CusTextStyle.itemText.copyWith(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700),
@@ -529,7 +529,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Kemudahan Pembayaran',
+                                  'Pembayaran Mudah',
                                   style: CusTextStyle.itemText.copyWith(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700),
@@ -909,6 +909,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               VerticalSeparator(height: 5),
+              Center(
+                child: Text(
+                  'Kenapa Metronom Soundsystem?',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 5),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 decoration: BoxDecoration(
@@ -950,7 +958,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     VerticalSeparator(height: .5),
                                     Text(
-                                      'Kemudahan Pembuatan Acara',
+                                      'MSS untuk kebutuhan acara keseluruhan',
                                       style: CusTextStyle.itemText
                                           .copyWith(fontSize: 14),
                                     ),
@@ -987,7 +995,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     VerticalSeparator(height: .5),
                                     Text(
-                                      'Dukungan teknis setiap saat',
+                                      'Gratis konsultasi teknis setiap waktu',
                                       style: CusTextStyle.itemText
                                           .copyWith(fontSize: 14),
                                     ),
@@ -1021,7 +1029,7 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Jaminan Pelayanan Terbaik',
+                                      'Pelayanan Terbaik',
                                       style: CusTextStyle.itemText.copyWith(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700),
@@ -1058,7 +1066,7 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Kemudahan Pembayaran',
+                                      'Pembayaran Mudah',
                                       style: CusTextStyle.itemText.copyWith(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700),
@@ -1420,7 +1428,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 VerticalSeparator(height: .5),
                                 Text(
-                                  'Kemudahan Pembuatan Acara',
+                                  'MSS untuk kebutuhan acara keseluruhan',
                                   textAlign: TextAlign.center,
                                   style: CusTextStyle.itemText
                                       .copyWith(fontSize: 14),
@@ -1448,7 +1456,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 VerticalSeparator(height: .5),
                                 Text(
-                                  'Dukungan teknis setiap saat',
+                                  'Gratis konsultasi teknis setiap waktu',
                                   textAlign: TextAlign.center,
                                   style: CusTextStyle.itemText
                                       .copyWith(fontSize: 14),
@@ -1472,7 +1480,7 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.fitWidth),
                                 VerticalSeparator(height: 1),
                                 Text(
-                                  'Jaminan Pelayanan Terbaik',
+                                  'Pelayanan Terbaik',
                                   textAlign: TextAlign.center,
                                   style: CusTextStyle.itemText.copyWith(
                                       fontSize: 16,
@@ -1500,7 +1508,7 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.fitWidth),
                                 VerticalSeparator(height: 1),
                                 Text(
-                                  'Kemudahan Pembayaran',
+                                  'Pembayaran Mudah',
                                   textAlign: TextAlign.center,
                                   style: CusTextStyle.itemText.copyWith(
                                       fontSize: 16,

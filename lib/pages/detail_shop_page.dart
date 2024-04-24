@@ -13,6 +13,7 @@ import 'package:ecom_web_flutter/widget/footer.dart';
 import 'package:ecom_web_flutter/widget/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailProductPage extends StatelessWidget {
@@ -149,8 +150,8 @@ class _ShopPageState extends State<DetailShopPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: SizeConfig.safeBlockHorizontal * 15,
-                          height: SizeConfig.safeBlockHorizontal * 15,
+                          width: SizeConfig.safeBlockHorizontal * 35,
+                          height: SizeConfig.safeBlockHorizontal * 35,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
                               boxShadow: [
@@ -165,7 +166,7 @@ class _ShopPageState extends State<DetailShopPage> {
                         ),
                         HorizontalSeparator(width: 3),
                         SizedBox(
-                          width: SizeConfig.safeBlockHorizontal * 62,
+                          width: SizeConfig.safeBlockHorizontal * 37,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -180,6 +181,17 @@ class _ShopPageState extends State<DetailShopPage> {
                                 style: CusTextStyle.itemText.copyWith(
                                     color: Color(0xff979797),
                                     fontWeight: FontWeight.w700),
+                              ),
+                              VerticalSeparator(height: 2),
+                              Text(
+                                'Produk Detail',
+                                style: CusTextStyle.itemText
+                                    .copyWith(fontSize: 16),
+                              ),
+                              VerticalSeparator(height: 1),
+                              Text(
+                                '${productData.productDetail}',
+                                style: CusTextStyle.bodyText.copyWith(fontSize: 14),
                               ),
                               VerticalSeparator(height: 2),
                               Visibility(
@@ -283,9 +295,7 @@ class _ShopPageState extends State<DetailShopPage> {
                                                       child:
                                                           const Text("Login"),
                                                       onPressed: () {
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            '/account');
+                                                        context.go('/account');
                                                       },
                                                     ),
                                                     TextButton(
@@ -305,6 +315,16 @@ class _ShopPageState extends State<DetailShopPage> {
                                         Icons.shopping_cart_outlined,
                                       ),
                                     ),
+                                  ),
+                                  HorizontalSeparator(width: 3),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: Color(0xff19D16F)),
+                                    onPressed: (){
+                                      launchUrl(Uri.parse('https://wa.me/081918887333?text=Hallo%2C%20kak!%20Mau%20konsultasi%20rentalnya'));
+                                    }, 
+                                    child: Text('Konsultasi', style: CusTextStyle.bodyText.copyWith(color: Colors.white),)
                                   )
                                 ],
                               ),
@@ -342,7 +362,7 @@ class _ShopPageState extends State<DetailShopPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeConfig.safeBlockHorizontal * 10),
                   child: Text(
-                    'Produk Detail dan Deskripsi Produk',
+                    'Deskripsi Produk',
                     style: CusTextStyle.itemText
                         .copyWith(fontSize: 22, fontWeight: FontWeight.w700),
                   ),
@@ -352,7 +372,7 @@ class _ShopPageState extends State<DetailShopPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeConfig.safeBlockHorizontal * 10),
                   child: Text(
-                    '${productData.productDetail}\n\n${productData.description}',
+                    '${productData.description}',
                     style: CusTextStyle.bodyText.copyWith(fontSize: 14),
                   ),
                 ),
@@ -445,6 +465,17 @@ class _ShopPageState extends State<DetailShopPage> {
                               color: Color(0xff979797),
                               fontWeight: FontWeight.w700),
                         ),
+                        VerticalSeparator(height: 2),
+                        Text(
+                          'Produk Detail',
+                          style: CusTextStyle.itemText.copyWith(
+                              fontSize: 16),
+                        ),
+                        VerticalSeparator(height: 1),
+                        Text(
+                            '${productData.productDetail}',
+                            style:
+                                CusTextStyle.bodyText.copyWith(fontSize: 14)),
                         VerticalSeparator(height: 2),
                         Visibility(
                           visible: productData.priceSale !=
@@ -587,13 +618,13 @@ class _ShopPageState extends State<DetailShopPage> {
                         ),
                         VerticalSeparator(height: 3),
                         Text(
-                          'Produk Detail dan Deskripsi Produk',
+                          'Deskripsi Produk',
                           style: CusTextStyle.itemText.copyWith(
                               fontSize: 22, fontWeight: FontWeight.w700),
                         ),
                         VerticalSeparator(height: 1),
                         Text(
-                            '${productData.productDetail}\n\n${productData.description}',
+                            '${productData.description}',
                             style:
                                 CusTextStyle.bodyText.copyWith(fontSize: 14)),
                         // GestureDetector(

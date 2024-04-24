@@ -63,43 +63,43 @@ Future<bool> isSignIn() async {
 Future<void> silentSignIn() async {
   GoogleSignInAccount? googleSignInAccount;
   User? user;
-  bool isAuth = await isSignIn();
+  // bool isAuth = await isSignIn();
 
-  if (!isAuth) {
-    try {
-      googleSignInAccount = await signIn.signInSilently(
-          reAuthenticate: true, suppressErrors: false);
-    } catch (error) {
-      print('Error on silent sign-in: $error');
-    }
+  // if (!isAuth) {
+  //   try {
+  //     googleSignInAccount = await signIn.signInSilently(
+  //         reAuthenticate: true, suppressErrors: false);
+  //   } catch (error) {
+  //     print('Error on silent sign-in: $error');
+  //   }
 
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleAuth =
-          await googleSignInAccount.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleSignInAccount.authentication;
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
 
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      user = userCredential.user;
-    }
+  //     final UserCredential userCredential =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     user = userCredential.user;
+  //   }
 
-    final String? token = await user?.getIdToken();
-    print(token);
-    if (token != null && user != null) {
-      setSharedPref(
-          name: user.displayName, token: token, imageUrl: user.photoURL);
+  //   final String? token = await user?.getIdToken();
+  //   print(token);
+  //   if (token != null && user != null) {
+  //     setSharedPref(
+  //         name: user.displayName, token: token, imageUrl: user.photoURL);
 
-      SignInModel model = await signInJWT(token);
-      if (model.errors == null || model.errors!.errorCode == null) {
-        SharedPreferencesManager pref = locator<SharedPreferencesManager>();
-        pref.putString(
-            SharedPreferencesManager.keyAccessToken, model.data!.token.token);
-      }
-    }
-  }
+  //     SignInModel model = await signInJWT(token);
+  //     if (model.errors == null || model.errors!.errorCode == null) {
+  //       SharedPreferencesManager pref = locator<SharedPreferencesManager>();
+  //       pref.putString(
+  //           SharedPreferencesManager.keyAccessToken, model.data!.token.token);
+  //     }
+  //   }
+  // }
 }
 
 Future<bool> handleAuthorizeScopes() async {
