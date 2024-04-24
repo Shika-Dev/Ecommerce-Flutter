@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:accordion/accordion.dart';
+import 'package:accordion/controllers.dart';
 import 'package:ecom_web_flutter/api_repository/data_sources/product_datasource.dart';
 import 'package:ecom_web_flutter/bloc/product_bloc/product_bloc.dart';
 import 'package:ecom_web_flutter/firebase_options.dart';
@@ -57,8 +59,11 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool mouseHover = false;
   int _currentPage = 0;
-  // int _currentCatPage = 0;
+  int _currentTestimoniesPage = 0;
   PageController _pageController = PageController(
+    initialPage: 0,
+  );
+  PageController _testimoniController = PageController(
     initialPage: 0,
   );
   // PageController _catController = PageController(initialPage: 0);
@@ -66,6 +71,7 @@ class _HomePageState extends State<HomePage> {
   ScrollController _categoryListView = ScrollController();
 
   late Timer timer;
+  late Timer testimoniesTimer;
 
   List<LinearGradient> listGradientColor = const [
     LinearGradient(colors: [
@@ -84,6 +90,65 @@ class _HomePageState extends State<HomePage> {
       Color(0xff0ac762),
       Color(0xff6bee94),
     ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+  ];
+
+  List testimonies = [
+    {
+      'assets': 'assets/images/01.jpeg',
+      'name': 'Budi Setiawan',
+      'rating': 5,
+      'review':
+          'Pelayanan yang sangat memuaskan! Alat-alatnya berkualitas tinggi dan timnya sangat ramah. Pasti akan saya gunakan lagi untuk acara selanjutnya.'
+    },
+    {
+      'assets': 'assets/images/02.jpg',
+      'name': 'Anisa Fitriani',
+      'rating': 4,
+      'review':
+          'Proses penyewaannya mudah dan alat-alatnya dalam kondisi baik. Hanya harapannya agar ada lebih banyak pilihan harga.'
+    },
+    {
+      'assets': 'assets/images/03.jpg',
+      'name': 'Bambang Gunawan',
+      'rating': 5,
+      'review':
+          'Saya sangat terbantu dengan layanan pelanggan yang responsif. Acara saya berjalan lancar berkat alat-alat berkualitas dari sini.'
+    },
+    {
+      'assets': 'assets/images/04.jpeg',
+      'name': 'Dito Prabowo',
+      'rating': 3,
+      'review':
+          'Alat-alat dalam kondisi baik, tetapi ada sedikit masalah dengan jadwal pengantaran. Harap ditingkatkan untuk pengalaman yang lebih baik di masa depan.'
+    },
+    {
+      'assets': 'assets/images/05.jpg',
+      'name': 'Irfan Santoso',
+      'rating': 5,
+      'review':
+          'Pilihan alat-alatnya beragam dan harga sewanya cukup terjangkau. Saya sangat merekomendasikan layanan ini.'
+    },
+    {
+      'assets': 'assets/images/06.jpg',
+      'name': 'Citra Wijaya',
+      'rating': 4,
+      'review':
+          'Pengiriman tepat waktu dan alat-alat berkualitas. Hanya sedikit harapan agar harganya lebih kompetitif.'
+    },
+    {
+      'assets': 'assets/images/07.jpg',
+      'name': 'Melly Agustina',
+      'rating': 5,
+      'review':
+          'Pelayanan yang sangat memuaskan! Alat-alatnya berkualitas tinggi dan timnya sangat ramah. Pasti akan saya gunakan lagi untuk acara selanjutnya.'
+    },
+    {
+      'assets': 'assets/images/08.jpeg',
+      'name': 'Vira Nagita',
+      'rating': 5,
+      'review':
+          'Pelayanan yang sangat memuaskan! Alat-alatnya berkualitas tinggi dan timnya sangat ramah. Pasti akan saya gunakan lagi untuk acara selanjutnya.'
+    }
   ];
 
   @override
@@ -106,30 +171,31 @@ class _HomePageState extends State<HomePage> {
         }
       });
     });
-    // Timer.periodic(Duration(seconds: 15), (Timer timer) {
-    //   return setState(() {
-    //     if (_currentCatPage < 3) {
-    //       _currentCatPage++;
-    //     } else {
-    //       _currentCatPage = 0;
-    //     }
-    //     if (_catController.hasClients) {
-    //       _catController.animateToPage(
-    //         _currentCatPage,
-    //         duration: Duration(milliseconds: 350),
-    //         curve: Curves.easeIn,
-    //       );
-    //     }
-    //   });
-    // });
+    testimoniesTimer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+      return setState(() {
+        if (_currentTestimoniesPage < 3) {
+          _currentTestimoniesPage++;
+        } else {
+          _currentTestimoniesPage = 0;
+        }
+        if (_testimoniController.hasClients) {
+          _testimoniController.animateToPage(
+            _currentTestimoniesPage,
+            duration: Duration(milliseconds: 350),
+            curve: Curves.easeIn,
+          );
+        }
+      });
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     timer.cancel();
+    testimoniesTimer.cancel();
     _pageController.dispose();
-    // _catController.dispose();
+    _testimoniController.dispose();
     _mainListView.dispose();
     super.dispose();
   }
@@ -230,6 +296,48 @@ class _HomePageState extends State<HomePage> {
           productItem(list[counter + 2], false),
           productItem(list[counter + 3], false)
         ],
+      ));
+      counter += 4;
+    }
+
+    List listTestimonies = List.empty(growable: true);
+    for (int x = 0; x < 4; x++) {
+      listTestimonies.add(testimonies[x]);
+    }
+    int pageTestimonies = (testimonies.length / 4).round();
+    List<Widget> listTestimoniesWidget = List.empty(growable: true);
+    for (int counter = 0, i = 0; i < pageTestimonies; i++) {
+      listTestimoniesWidget.add(IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            testimoniItem(
+                testimonies[counter]['assets'],
+                testimonies[counter]['name'],
+                testimonies[counter]['review'],
+                testimonies[counter]['rating'],
+                false),
+            testimoniItem(
+                testimonies[counter + 1]['assets'],
+                testimonies[counter + 1]['name'],
+                testimonies[counter + 1]['review'],
+                testimonies[counter + 1]['rating'],
+                false),
+            testimoniItem(
+                testimonies[counter + 2]['assets'],
+                testimonies[counter + 2]['name'],
+                testimonies[counter + 2]['review'],
+                testimonies[counter + 2]['rating'],
+                false),
+            testimoniItem(
+                testimonies[counter + 3]['assets'],
+                testimonies[counter + 3]['name'],
+                testimonies[counter + 3]['review'],
+                testimonies[counter + 3]['rating'],
+                false)
+          ],
+        ),
       ));
       counter += 4;
     }
@@ -543,6 +651,117 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               VerticalSeparator(height: 5),
+              Center(
+                child: Text(
+                  'Testimoni Dari Pelanggan Kami',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              SizedBox(
+                height: SizeConfig.safeBlockVertical * 40,
+                child: PageView(
+                  pageSnapping: true,
+                  controller: _testimoniController,
+                  children: [...listTestimoniesWidget],
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Center(
+                child: SizedBox(
+                  height: 4,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => setState(() {
+                        _currentTestimoniesPage = index;
+                        _testimoniController.animateToPage(
+                          _currentTestimoniesPage,
+                          duration: Duration(milliseconds: 350),
+                          curve: Curves.easeIn,
+                        );
+                      }),
+                      child: Container(
+                          width: 24,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: index == _currentTestimoniesPage
+                                  ? CusColor.black
+                                  : CusColor.black.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    separatorBuilder: (context, index) =>
+                        HorizontalSeparator(width: 1),
+                    itemCount: pageTestimonies,
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Center(
+                child: Text(
+                  'FAQ',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Accordion(
+                  headerBorderColor: CusColor.black,
+                  headerBorderColorOpened: CusColor.black,
+                  // headerBorderWidth: 1,
+                  headerBackgroundColorOpened: CusColor.black,
+                  headerBackgroundColor: CusColor.black,
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: CusColor.black,
+                  contentBorderWidth: 3,
+                  contentHorizontalPadding: 20,
+                  scaleWhenAnimating: true,
+                  openAndCloseAnimation: true,
+                  headerPadding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  paddingBetweenClosedSections: 40,
+                  paddingBetweenOpenSections: 40,
+                  sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+                  sectionClosingHapticFeedback: SectionHapticFeedback.light,
+                  children: [
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                  ]),
+              VerticalSeparator(height: 5),
               SizedBox(
                 height: SizeConfig.safeBlockVertical * 35,
                 child: OverflowBox(
@@ -574,6 +793,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               productItem(list[counter], false),
               productItem(list[counter + 1], false),
@@ -582,9 +802,59 @@ class _HomePageState extends State<HomePage> {
           VerticalSeparator(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               productItem(list[counter + 2], false),
               productItem(list[counter + 3], false)
+            ],
+          ),
+        ],
+      ));
+      counter += 4;
+    }
+
+    List listTestimonies = List.empty(growable: true);
+    for (int x = 0; x < 4; x++) {
+      listTestimonies.add(testimonies[x]);
+    }
+    int pageTestimonies = (testimonies.length / 4).round();
+    List<Widget> listTestimoniesWidget = List.empty(growable: true);
+    for (int counter = 0, i = 0; i < pageTestimonies; i++) {
+      listTestimoniesWidget.add(Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              testimoniItem(
+                  testimonies[counter]['assets'],
+                  testimonies[counter]['name'],
+                  testimonies[counter]['review'],
+                  testimonies[counter]['rating'],
+                  false),
+              testimoniItem(
+                  testimonies[counter + 1]['assets'],
+                  testimonies[counter + 1]['name'],
+                  testimonies[counter + 1]['review'],
+                  testimonies[counter + 1]['rating'],
+                  false),
+            ],
+          ),
+          VerticalSeparator(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              testimoniItem(
+                  testimonies[counter + 2]['assets'],
+                  testimonies[counter + 2]['name'],
+                  testimonies[counter + 2]['review'],
+                  testimonies[counter + 2]['rating'],
+                  false),
+              testimoniItem(
+                  testimonies[counter + 3]['assets'],
+                  testimonies[counter + 3]['name'],
+                  testimonies[counter + 3]['review'],
+                  testimonies[counter + 3]['rating'],
+                  false)
             ],
           ),
         ],
@@ -910,6 +1180,116 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+              VerticalSeparator(height: 5),
+              Center(
+                child: Text(
+                  'Testimoni Dari Pelanggan Kami',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              SizedBox(
+                height: SizeConfig.safeBlockVertical * 60,
+                child: PageView(
+                  pageSnapping: true,
+                  controller: _testimoniController,
+                  children: [...listTestimoniesWidget],
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  height: 4,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => setState(() {
+                        _currentTestimoniesPage = index;
+                        _testimoniController.animateToPage(
+                          _currentTestimoniesPage,
+                          duration: Duration(milliseconds: 350),
+                          curve: Curves.easeIn,
+                        );
+                      }),
+                      child: Container(
+                          width: 24,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: index == _currentTestimoniesPage
+                                  ? CusColor.black
+                                  : CusColor.black.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    separatorBuilder: (context, index) =>
+                        HorizontalSeparator(width: 1),
+                    itemCount: pageTestimonies,
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Center(
+                child: Text(
+                  'FAQ',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Accordion(
+                  headerBorderColor: CusColor.black,
+                  headerBorderColorOpened: CusColor.black,
+                  // headerBorderWidth: 1,
+                  headerBackgroundColorOpened: CusColor.black,
+                  headerBackgroundColor: CusColor.black,
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: CusColor.black,
+                  contentBorderWidth: 3,
+                  contentHorizontalPadding: 20,
+                  scaleWhenAnimating: true,
+                  openAndCloseAnimation: true,
+                  headerPadding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  paddingBetweenClosedSections: 40,
+                  paddingBetweenOpenSections: 40,
+                  sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+                  sectionClosingHapticFeedback: SectionHapticFeedback.light,
+                  children: [
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                    AccordionSection(
+                      contentVerticalPadding: 20,
+                      leftIcon: const Icon(Icons.question_mark_rounded,
+                          color: Colors.white),
+                      header: Text('Lorem ipsum sir dolot amet',
+                          style: CusTextStyle.bodyText.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      content: Text('loremIpsum', style: CusTextStyle.bodyText),
+                    ),
+                  ]),
               VerticalSeparator(height: 5),
               SizedBox(
                 height: SizeConfig.safeBlockVertical * 35,
@@ -1244,6 +1624,136 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               VerticalSeparator(height: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 10),
+                child: Center(
+                  child: Text(
+                    'Testimoni Dari Pelanggan Kami',
+                    style: CusTextStyle.bodyText
+                        .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Container(
+                height: SizeConfig.safeBlockVertical * 37,
+                child: PageView(
+                  pageSnapping: true,
+                  controller: _testimoniController,
+                  children: testimonies
+                      .map((e) => Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.safeBlockHorizontal * 10,
+                                vertical: 16),
+                            child: testimoniItem(e['assets'], e['name'],
+                                e['review'], e['rating'], true),
+                          ))
+                      .toList(),
+                ),
+              ),
+              VerticalSeparator(height: 5),
+              Center(
+                child: SizedBox(
+                  height: 4,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => setState(() {
+                        _currentTestimoniesPage = index;
+                        _testimoniController.animateToPage(
+                          _currentTestimoniesPage,
+                          duration: Duration(milliseconds: 350),
+                          curve: Curves.easeIn,
+                        );
+                      }),
+                      child: Container(
+                          width: 24,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: index == _currentTestimoniesPage
+                                  ? CusColor.black
+                                  : CusColor.black.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    separatorBuilder: (context, index) =>
+                        HorizontalSeparator(width: 1),
+                    itemCount: testimonies.length,
+                  ),
+                ),
+              ),
+              VerticalSeparator(height: 10),
+              Center(
+                child: Text(
+                  'FAQ',
+                  style: CusTextStyle.bodyText
+                      .copyWith(fontSize: 42, fontWeight: FontWeight.w700),
+                ),
+              ),
+              VerticalSeparator(height: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 10),
+                child: Accordion(
+                    headerBorderColor: CusColor.black,
+                    headerBorderColorOpened: CusColor.black,
+                    // headerBorderWidth: 1,
+                    headerBackgroundColorOpened: CusColor.black,
+                    headerBackgroundColor: CusColor.black,
+                    contentBackgroundColor: Colors.white,
+                    contentBorderColor: CusColor.black,
+                    contentBorderWidth: 3,
+                    contentHorizontalPadding: 20,
+                    scaleWhenAnimating: true,
+                    openAndCloseAnimation: true,
+                    headerPadding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 15),
+                    paddingBetweenClosedSections: 40,
+                    paddingBetweenOpenSections: 40,
+                    sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+                    sectionClosingHapticFeedback: SectionHapticFeedback.light,
+                    children: [
+                      AccordionSection(
+                        contentVerticalPadding: 20,
+                        leftIcon: const Icon(Icons.question_mark_rounded,
+                            color: Colors.white),
+                        header: Text('Lorem ipsum sir dolot amet',
+                            style: CusTextStyle.bodyText.copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white)),
+                        content:
+                            Text('loremIpsum', style: CusTextStyle.bodyText),
+                      ),
+                      AccordionSection(
+                        contentVerticalPadding: 20,
+                        leftIcon: const Icon(Icons.question_mark_rounded,
+                            color: Colors.white),
+                        header: Text('Lorem ipsum sir dolot amet',
+                            style: CusTextStyle.bodyText.copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white)),
+                        content:
+                            Text('loremIpsum', style: CusTextStyle.bodyText),
+                      ),
+                      AccordionSection(
+                        contentVerticalPadding: 20,
+                        leftIcon: const Icon(Icons.question_mark_rounded,
+                            color: Colors.white),
+                        header: Text('Lorem ipsum sir dolot amet',
+                            style: CusTextStyle.bodyText.copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white)),
+                        content:
+                            Text('loremIpsum', style: CusTextStyle.bodyText),
+                      ),
+                    ]),
+              ),
+              VerticalSeparator(height: 10),
               SizedBox(
                 height: SizeConfig.safeBlockVertical * 70,
                 child: OverflowBox(
@@ -1516,6 +2026,63 @@ class _HomePageState extends State<HomePage> {
         VerticalSeparator(height: 2),
         Text(title, style: CusTextStyle.itemText.copyWith(fontSize: 20)),
       ],
+    );
+  }
+
+  Widget testimoniItem(
+      String photo, String name, String review, int star, bool isSmall) {
+    return Container(
+      width: isSmall ? 182 : 300,
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 4),
+            color: Colors.black.withOpacity(.1),
+            blurRadius: 10,
+          )
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: AssetImage(photo), fit: BoxFit.cover)),
+          ),
+          VerticalSeparator(height: 2),
+          Text(
+            name,
+            style: CusTextStyle.bodyText.copyWith(fontWeight: FontWeight.w500),
+          ),
+          VerticalSeparator(height: 1),
+          SizedBox(
+            height: 24,
+            width: 160,
+            child: ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => Icon(Icons.star_rounded,
+                    color: index < star ? Colors.amber : Colors.grey),
+                separatorBuilder: (_, __) => SizedBox(width: 8),
+                itemCount: 5),
+          ),
+          VerticalSeparator(height: 1),
+          Text(
+            review,
+            style: CusTextStyle.bodyText,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 }
