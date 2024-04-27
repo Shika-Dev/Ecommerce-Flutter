@@ -4,7 +4,7 @@ flutter_native_splash:
 
   image: assets/logo/logo.gif
 
-  color_dark: "#042a49"
+  color_dark: "#ffffff"
   #background_image_dark: "assets/dark-background.png"
   image_dark: assets/logo/logo.gif
   #branding_dark: assets/dart_dark.png

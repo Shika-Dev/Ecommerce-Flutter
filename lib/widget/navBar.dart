@@ -69,6 +69,14 @@ class _NavBarState extends State<NavBar> {
                             .copyWith(fontWeight: FontWeight.w600)
                         : CusTextStyle.navText.copyWith(color: Colors.black45)),
               ),
+              InkWell(
+                onTap: () => context.go('/about'),
+                child: Text('About',
+                    style: widget.index == 2
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText.copyWith(color: Colors.black45)),
+              ),
               Spacer(),
               Visibility(
                 visible: _showSearch,
@@ -195,6 +203,20 @@ class _NavBarState extends State<NavBar> {
                   onTap: () => context.go('/shop'),
                   child: Text('Layanan',
                       style: widget.index == 1
+                          ? CusTextStyle.navText
+                              .copyWith(fontWeight: FontWeight.w600)
+                          : CusTextStyle.navText
+                              .copyWith(color: Colors.black45)),
+                ),
+              ),
+              Visibility(
+                  visible: !_showSearch, child: HorizontalSeparator(width: 2)),
+              Visibility(
+                visible: !_showSearch,
+                child: InkWell(
+                  onTap: () => context.go('/about'),
+                  child: Text('About',
+                      style: widget.index == 2
                           ? CusTextStyle.navText
                               .copyWith(fontWeight: FontWeight.w600)
                           : CusTextStyle.navText
@@ -433,6 +455,15 @@ class _NavDrawerState extends State<NavDrawer> {
             InkWell(
                 onTap: () => context.go('/cart'),
                 child: Text('Cart',
+                    style: widget.index == 2
+                        ? CusTextStyle.navText
+                            .copyWith(fontWeight: FontWeight.w600)
+                        : CusTextStyle.navText
+                            .copyWith(color: Colors.black45))),
+            VerticalSeparator(height: 3),
+            InkWell(
+                onTap: () => context.go('/about'),
+                child: Text('About',
                     style: widget.index == 2
                         ? CusTextStyle.navText
                             .copyWith(fontWeight: FontWeight.w600)

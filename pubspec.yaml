@@ -66,6 +66,8 @@ dependencies:
   timeline_tile: ^2.0.0
   font_awesome_flutter: ^10.7.0
   accordion: ^2.6.0
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.1
 
 dev_dependencies:
   json_serializable: ^6.7.1

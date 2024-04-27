@@ -1,4 +1,5 @@
 import 'package:ecom_web_flutter/main.dart';
+import 'package:ecom_web_flutter/pages/about_page.dart';
 import 'package:ecom_web_flutter/pages/account_page.dart';
 import 'package:ecom_web_flutter/pages/cart_page.dart';
 import 'package:ecom_web_flutter/pages/detail_shop_page.dart';
@@ -32,6 +33,10 @@ final routerConfig = GoRouter(
     GoRoute(
       path: '/cart',
       builder: (context, state) => CartPage(),
+    ),
+    GoRoute(
+      path: '/about',
+      builder: (context, state) => AboutPage(),
     ),
   ],
 );
