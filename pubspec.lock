@@ -1062,6 +1062,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  timeline_tile:
+    dependency: "direct main"
+    description:
+      name: timeline_tile
+      sha256: "85ec2023c67137397c2812e3e848b2fb20b410b67cd9aff304bb5480c376fc0c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   timing:
     dependency: transitive
     description:
@@ -1193,12 +1201,12 @@ packages:
   watcher:
     dependency: transitive
     description:
-      name: watcher
-      sha256: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"
+      name: vm_service
+      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
-  web:
+    version: "13.0.0"
+  watcher:
     dependency: transitive
     description:
       name: web
